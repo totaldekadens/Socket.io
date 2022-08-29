@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
-/* import { io } from "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"; */
 import { useEffect } from 'react'
+import Sidebar from './components/sidebar/sidebar';
+import Content from './components/content/content';
 
 function App() {
 
@@ -17,7 +18,10 @@ function App() {
 
 
   return (
-    <div>hej</div>
+    <div style={{display: "flex", width: "100vw", height: "100vh"}}>
+      <Sidebar/>
+      <Content/>
+    </div>
   )
 }
 
