@@ -13,7 +13,20 @@ io.on("connection", (socket) => {
     console.log("Socket has connected: " + socket.id)
 
     io.emit("newSocketConnected", socket.id)
+
+    /* Ange */
+
+
+
+
+    /* Fredrik */
+
+
+
+
+    /* Hugo */
 })
+
 
 
 
