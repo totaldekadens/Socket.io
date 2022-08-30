@@ -25,6 +25,8 @@ const CreateRoom = () => {
 
         socketInfoCopy.joinedRoom = room
         setSocketInfo(socketInfoCopy)
+        setIsCreateRoom(false)
+        setRoom("")
     }
 
     // Temporary
