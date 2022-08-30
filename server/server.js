@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import express from 'express';
 import { router as cityRouter } from './api/weather/getCity.js'
 import { router as weatherRouter } from './api/weather/getWeather.js'
+import { router as gifRouter } from './api/gif/getGif.js'
 
 const app = express()
 const httpServer = createServer(app);
@@ -11,6 +12,7 @@ const io = new Server(httpServer, {cors: {origin: "*"}});
 
 app.use("/api/city", cityRouter);
 app.use("/api/weather", weatherRouter)
+app.use("/api/gif", gifRouter)
 
 
 io.on("connection", (socket) => {
