@@ -12,7 +12,7 @@ const CreateRoom = () => {
     const [room, setRoom] = useState("")
 
     // Copy of context
-    let socketInfoCopy = {...socketInfo} // skillnad på denna och vanlig variabel endast?
+    let socketInfoCopy = socketInfo  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
 
     // Handle "skapa rum"-button. "Sends" new object when joining new room and updates context. 
     const handleClick = () => {
@@ -26,8 +26,6 @@ const CreateRoom = () => {
         socketInfoCopy.joinedRoom = room
         setSocketInfo(socketInfoCopy)
     }
-
-    console.log(socketInfo)
 
     // Temporary
     const handleGetRooms = () => {

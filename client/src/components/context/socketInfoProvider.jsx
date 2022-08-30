@@ -21,12 +21,11 @@ export const SocketInfoProvider = ({ children }) => {
             console.log("New socket connected: " + socketId)
         })
 
-        // Welcomes user when joining new room
+        // Welcomes user when joining new room // Kolla upp hur du får med både welcome och join.
         socket.on("welcome", (msg) => {
             socketInfoCopy.welcomeMsg = msg
+            setSocketInfo(socketInfoCopy)
         })
-
-        console.log(socketInfo)
 
         return () => {
             socket.off('newSocketConnected');
@@ -38,7 +37,7 @@ export const SocketInfoProvider = ({ children }) => {
 
     // funktioner till emit ? 
 
-
+    
 
     return (
         <socketInfoContext.Provider value={{ socketInfo, setSocketInfo, socket }}>
