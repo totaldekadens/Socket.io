@@ -5,4 +5,14 @@ GET http://localhost:3000/api/city/gote
 
 ###
 
+
 GET http://localhost:3000/api/weather/15.16667/58.45
+
+
+###
+
+
+GET http://localhost:3000/api/gif/wow
+
+
+###
