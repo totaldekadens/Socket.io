@@ -15,8 +15,19 @@ io.on("connection", (socket) => {
     io.emit("newSocketConnected", socket.id)
 
     /* Ange */
+    
+    // Join/Create room
+    socket.on("join", (socketRoomData) => {
+        socket.leave(socketRoomData.roomToLeave)
+        socket.join(socketRoomData.roomToJoin)
+        socket.nickname = socketRoomData.nickname
+        io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
+    })
 
-
+    // Get rooms
+    socket.on("getRooms", () => {
+        console.log(io.sockets.adapter.rooms)
+    })
 
 
     /* Fredrik */
