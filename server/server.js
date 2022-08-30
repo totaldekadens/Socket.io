@@ -1,12 +1,16 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
-import express from 'express'
+import express from 'express';
+import { router as cityRouter } from './api/weather/getCity.js'
+import { router as weatherRouter } from './api/weather/getWeather.js'
 
 const app = express()
 const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
 
+app.use("/api/city", cityRouter);
+app.use("/api/weather", weatherRouter)
 
 
 io.on("connection", (socket) => {
