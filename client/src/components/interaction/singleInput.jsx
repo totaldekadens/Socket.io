@@ -1,0 +1,15 @@
+import Button from '@mui/material/Button';
+import TextInput from './textField';
+
+const SingleInput = (props) => {
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px" }}>
+            <h2>{props.title}</h2>
+            <TextInput setState={props.setState} state={props.state} label={props.label} />
+            <Button style={{ padding: "10px" }} onClick={props.handleClick} variant="contained">{props.btnLabel}</Button>
+        </div>
+    )
+}
+
+export default SingleInput
