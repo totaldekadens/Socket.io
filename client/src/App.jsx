@@ -4,23 +4,23 @@ import Content from './components/content/content';
 import { useContext, useState, useEffect } from "react"
 import { socketInfoContext } from './components/context/socketInfoProvider';
 import Modal from './components/modal/modal';
-import TextField from '@mui/material/TextField';
+import SingleInput from './components/interaction/singleInput';
 
 function App() {
 
-    // Context
+  // Context
   const { socketInfo, setSocketInfo } = useContext(socketInfoContext)
 
   // State
   const [shouldShowModal, setShouldShowModal] = useState(false)
   const [nickname, setNickname] = useState("")
 
-
+  // Updates socketInfo with nickname and closes modal.
   const handleClick = () => {
-   
+
     let socketInfoCopy = socketInfo
 
-    if(nickname.length > 0) {
+    if (nickname.length > 0) {
       socketInfoCopy.nickname = nickname
       setSocketInfo(socketInfoCopy)
       setShouldShowModal(false)
@@ -31,26 +31,32 @@ function App() {
   // If nickname is not set then modal will show up and ask for nickname before proceed.
   useEffect(() => {
 
-    socketInfo.nickname == "" ? 
-      setShouldShowModal(true) : 
+    socketInfo.nickname == "" ?
+      setShouldShowModal(true) :
       setShouldShowModal(false)
 
-}, [] )
+  }, [])
 
-console.log(socketInfo)
+  console.log(socketInfo)
 
   return (
-    <div style={{display: "flex", width: "100vw", height: "100vh"}}>
-        <Sidebar/>
-        <Content/>
-        <Modal shouldShow={shouldShowModal} onRequestClose={() => setShouldShowModal(false)} >
-            {/* Component for add nickname */}
-            <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
-              <TextField sx={{padding: "10px"}} id="outlined-basic" label="Fyll i ditt smeknamn" variant="outlined" type="text" value={nickname} onChange={(event) => {setNickname(event.target.value)}} />
-              <button style={{padding: "10px"}} onClick={handleClick}>Fortsätt</button>
-            </div>
-            
-        </Modal>
+    <div style={{ display: "flex", width: "100vw", height: "100vh" }}>
+      <Sidebar />
+      <Content />
+      <Modal
+        shouldShow={shouldShowModal}
+        onRequestClose={() => setShouldShowModal(false)}
+        isGetStarted={true}
+      >
+        <SingleInput
+          state={nickname}
+          setState={setNickname}
+          handleClick={handleClick}
+          label="Fyll i ditt smeknamn..."
+          btnLabel="Fortsätt"
+          title="Välkommen till chatten!"
+        />
+      </Modal>
     </div>
   )
 }

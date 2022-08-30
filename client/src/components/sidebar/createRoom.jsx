@@ -1,6 +1,8 @@
 import { useContext, useState } from "react"
 import { socketInfoContext } from "../context/socketInfoProvider";
-import TextField from '@mui/material/TextField';
+import Modal from '../modal/modal'
+import SingleInput from "../interaction/singleInput";
+import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 
 const CreateRoom = () => {
 
@@ -8,25 +10,27 @@ const CreateRoom = () => {
     const { socket, socketInfo, setSocketInfo } = useContext(socketInfoContext)
 
     // States
-    const [isCreateRoom, setIsCreateRoom] = useState(false)
+    const [shouldShowModal, setShouldShowModal] = useState(false)
     const [room, setRoom] = useState("")
 
     // Copy of context
     let socketInfoCopy = socketInfo  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
 
-    // Handle "skapa rum"-button. "Sends" new object when joining new room and updates context. 
+    // Handle "skapa rum"-button. Closes modal, "Sends" new object when joining new room and updates context. 
     const handleClick = () => {
 
-        socket.emit("join", {
-            roomToLeave: socketInfo.joinedRoom, 
-            roomToJoin: room, 
-            nickname: socketInfo.nickname
-        })
-
-        socketInfoCopy.joinedRoom = room
-        setSocketInfo(socketInfoCopy)
-        setIsCreateRoom(false)
-        setRoom("")
+        if(room.length > 0) {
+            socket.emit("join", {
+                roomToLeave: socketInfo.joinedRoom, 
+                roomToJoin: room, 
+                nickname: socketInfo.nickname
+            })
+    
+            socketInfoCopy.joinedRoom = room
+            setSocketInfo(socketInfoCopy)
+            setShouldShowModal(false)
+            setRoom("")
+        }
     }
 
     // Temporary
@@ -35,18 +39,43 @@ const CreateRoom = () => {
     }
 
     return (
+    <>
         <div style={{display: "flex", flexDirection: "column", padding: "10px"}}>
-            <div style={{padding: "10px", width: "100%", display: "flex", justifyContent: "flex-end", cursor: "pointer"}} onClick={() => setIsCreateRoom(!isCreateRoom)}><h3>Skapa rum +</h3></div> {/* ikon sedan */}
-            
-            { isCreateRoom ? 
-                <>
-                    <TextField sx={{padding: "10px"}} id="outlined-basic" label="Fyll i rum..." variant="outlined" type="text" value={room} onChange={(event) => {setRoom(event.target.value)}} />
-                    <button style={{padding: "10px"}} onClick={handleClick}>Skapa rum</button>
-                </>  
-                :   ""} 
+            <div 
+                style={{
+                    padding: "10px", 
+                    width: "100%", 
+                    display: "flex", 
+                    justifyContent: "flex-end", 
+                    cursor: "pointer",
+                    color: "white",
+                    fontSize:"25px",
+                    columnGap: "5px",
+                    alignItems: "center"
+                }} 
+                onClick={() => setShouldShowModal(true)}
+            >
+                <p>Skapa rum</p><AddBoxRoundedIcon/>
+            </div> 
+                    
             {/* Temporary */}
-            <button style={{padding: "10px"}} onClick={handleGetRooms}>Hämta alla rum</button>  {/* Temporär bara för att checka så att det funkar */}
+            <button style={{padding: "10px"}} onClick={handleGetRooms}>Hämta alla rum</button> 
         </div>
+        <Modal
+            shouldShow={shouldShowModal}
+            onRequestClose={() => setShouldShowModal(false)}
+            isGetStarted={false}
+        >
+            <SingleInput
+                state={room}
+                setState={setRoom}
+                handleClick={handleClick}
+                label="Fyll i rum..."
+                btnLabel="Skapa"
+                title="Skapa ditt egna rum"
+            />
+        </Modal>
+    </>
     )
 }
 
