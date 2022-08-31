@@ -24,6 +24,7 @@ io.on("connection", (socket) => {
     
     // Join/Create room
     socket.on("join", (socketRoomData) => {
+        console.log("kommer in i join")
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
@@ -44,6 +45,8 @@ io.on("connection", (socket) => {
     /* Hugo */
     // Recieves the message sent from client
     socket.on("msg", (msgObj) => {
+        console.log("kommer in i msg")
+        console.log(msgObj)
         io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
     })
 })

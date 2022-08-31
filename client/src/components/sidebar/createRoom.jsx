@@ -7,7 +7,7 @@ import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 const CreateRoom = () => {
 
     // Context
-    const { socket, socketInfo, setSocketInfo } = useContext(socketInfoContext)
+    const { socketInfo, setSocketInfo, getSocket} = useContext(socketInfoContext)
 
     // States
     const [shouldShowModal, setShouldShowModal] = useState(false)
@@ -16,10 +16,14 @@ const CreateRoom = () => {
     // Copy of context
     let socketInfoCopy = {...socketInfo}  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
 
+    // Gets socket
+    let socket = getSocket()
+
     // Handle "skapa rum"-button. Closes modal, "Sends" new object when joining new room and updates context. 
     const handleClick = () => {
 
         if(room.length > 0) {
+            
             socket.emit("join", {
                 roomToLeave: socketInfo.joinedRoom, 
                 roomToJoin: room, 
@@ -35,6 +39,7 @@ const CreateRoom = () => {
 
     // Temporary
     const handleGetRooms = () => {
+        // console.log("getRooms: " + socket)
         socket.emit("getRooms")
     }
 

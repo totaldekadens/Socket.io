@@ -9,13 +9,17 @@ import { socketInfoContext } from "../context/socketInfoProvider";
 const Chat = () => {
     
     // Context
-    const { socket, socketInfo, setSocketInfo } = useContext(socketInfoContext)
+    const { socketInfo, setSocketInfo, getSocket } = useContext(socketInfoContext)
     const [ getValue, setValue] = useState("")
     const msgRef = useRef()
     const [ getMsg, setMsg ] = useState([])
     msgRef.current = getMsg;
 
+    // Gets socket
+    let socket = getSocket()
+
     const handleSubmit = () => {
+        
         if(getValue != "" || getValue != " ") {
             socket.emit("msg", { msg: getValue, joinedRoom: socketInfo.joinedRoom })
             setValue("")
@@ -56,9 +60,9 @@ const Chat = () => {
 
             <div className="chat__messages" style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
                 {
-                    getMsg.map((msgObj) => {
+                    getMsg.map((msgObj, index) => {
                         return(
-                            <Msg nickname={msgObj.nickname} message={msgObj.message}/>
+                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message}/>
                         )
                     })
                 }
