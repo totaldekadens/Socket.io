@@ -4,8 +4,6 @@ import Msg from './msg';
 import { socketInfoContext } from "../context/socketInfoProvider";
 
 
-
-
 const Chat = () => {
     
     // Context
@@ -32,7 +30,9 @@ const Chat = () => {
             const newMsgList = [...msgRef.current];
             newMsgList.push({
                 nickname: msgObj.nickname,
-                message: msgObj.msg
+                message: msgObj.msg,
+                weather: msgObj.weather,
+                gifUrl: msgObj.gifUrl
             })
             setMsg(newMsgList)
         })
@@ -62,7 +62,9 @@ const Chat = () => {
                 {
                     getMsg.map((msgObj, index) => {
                         return(
-                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message}/>
+
+                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message} weather={msgObj.weather} gifUrl={msgObj.gifUrl}/>
+
                         )
                     })
                 }
