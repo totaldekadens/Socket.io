@@ -14,7 +14,7 @@ const CreateRoom = () => {
     const [room, setRoom] = useState("")
 
     // Copy of context
-    let socketInfoCopy = socketInfo  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
+    let socketInfoCopy = {...socketInfo}  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
 
     // Handle "skapa rum"-button. Closes modal, "Sends" new object when joining new room and updates context. 
     const handleClick = () => {
@@ -42,17 +42,7 @@ const CreateRoom = () => {
     <>
         <div style={{display: "flex", flexDirection: "column", padding: "10px"}}>
             <div 
-                style={{
-                    padding: "10px", 
-                    width: "100%", 
-                    display: "flex", 
-                    justifyContent: "flex-end", 
-                    cursor: "pointer",
-                    color: "white",
-                    fontSize:"25px",
-                    columnGap: "5px",
-                    alignItems: "center"
-                }} 
+                style={container} 
                 onClick={() => setShouldShowModal(true)}
             >
                 <p>Skapa rum</p><AddBoxRoundedIcon/>
@@ -77,6 +67,18 @@ const CreateRoom = () => {
         </Modal>
     </>
     )
+}
+
+const container = {
+    padding: "10px", 
+    width: "100%", 
+    display: "flex", 
+    justifyContent: "flex-end", 
+    cursor: "pointer",
+    color: "white",
+    fontSize:"25px",
+    columnGap: "5px",
+    alignItems: "center"
 }
 
 export default CreateRoom
