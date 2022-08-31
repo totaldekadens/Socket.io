@@ -4,8 +4,6 @@ import Msg from './msg';
 import { socketInfoContext } from "../context/socketInfoProvider";
 
 
-
-
 const Chat = () => {
     
     // Context
@@ -44,7 +42,7 @@ const Chat = () => {
             handleSubmit()
         }
     }
-
+    console.log(getMsg)
     return (
         <div className='chat' style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
 
@@ -56,9 +54,9 @@ const Chat = () => {
 
             <div className="chat__messages" style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
                 {
-                    getMsg.map((msgObj) => {
+                    getMsg.map((msgObj, index) => {
                         return(
-                            <Msg nickname={msgObj.nickname} message={msgObj.message}/>
+                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message} weather={msgObj.weather}/>
                         )
                     })
                 }

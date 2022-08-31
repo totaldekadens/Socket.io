@@ -52,7 +52,7 @@ io.on("connection", async (socket) => {
 
                 const cityResponse = await getCity(city);
                 const weather =  await getWeather(cityResponse);
-
+                console.log(weather)
                 io.in(msgObj.joinedRoom).emit("msg", {msg: "Weather in: " + cityResponse.cityName + ".", nickname: socket.nickname, weather})
 
                 return;
