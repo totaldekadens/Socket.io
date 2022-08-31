@@ -7,7 +7,7 @@ const UsersInRoom = (props) => {
                 props.users.map((user) => {
                     
                     return(
-                        <p style={{color: "white"}}>{user.nickname}</p>
+                        <p key={user.id} style={{color: "white"}}>{user.nickname}</p>
                     )
                 })
             }

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useRef } from "react";
 import io from 'socket.io-client';
 
 export const socketInfoContext = createContext()
@@ -7,22 +7,25 @@ export const SocketInfoProvider = ({ children }) => {
 
     const socket = io('http://localhost:3000');
 
+    const socketInfoRef = useRef()
     const [socketInfo, setSocketInfo] = useState({
         nickname: "", 
         joinedRoom: "",
         welcomeMsg: ""
     });
-
-    let socketInfoCopy = socketInfo
+    
+    // socketInfoRef.current will always be updated with the latest from socketInfo 
+    socketInfoRef.current = socketInfo
 
     useEffect(() => {
-
+        // Test, remove later
         socket.on("newSocketConnected", (socketId) => {
             console.log("New socket connected: " + socketId)
         })
 
-        // Welcomes user when joining new room // Kolla upp hur du får med både welcome och join.
+        // Welcomes user when joining new room 
         socket.on("welcome", (msg) => {
+            let socketInfoCopy = {...socketInfoRef.current}
             socketInfoCopy.welcomeMsg = msg
             setSocketInfo(socketInfoCopy)
         })
@@ -34,6 +37,7 @@ export const SocketInfoProvider = ({ children }) => {
 
     }, [])
 
+    console.log(socketInfo)
 
     // funktioner till emit ? 
 

@@ -10,10 +10,10 @@ export const listofRooms = [
                 id: "dfghjkuHJNM7"
             }, {
                 nickname: "Julle",
-                id: "dfghjkuHJNM7"
+                id: "dfghjnhkuHJNM7"
             }, {
                 nickname: "David",
-                id: "dfghjkuHJNM7"
+                id: "dfghjkuHJNMfg7"
             }
         ]
     }, {
@@ -21,10 +21,10 @@ export const listofRooms = [
         sockets: [
             {
                 nickname: "Angelica",
-                id: "dfghjkuHJNM7"
+                id: "dfghjkuHJNgtM7"
             }, {
                 nickname: "Lisa",
-                id: "dfghjkuHJNM7"
+                id: "dfghjkuHJereNM7"
             }
         ]
     }, {
@@ -32,7 +32,7 @@ export const listofRooms = [
         sockets: [
             {
                 nickname: "Hugo",
-                id: "dfghjkuHJNM7"
+                id: "dfghjkuHJNhhyM7"
             }
         ]
     }
