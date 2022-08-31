@@ -1,40 +1,25 @@
-import express from "express";
 import { geoNamesUserName } from "../apiKeys.js"
 import makeRequest from "../request.js";
 
 
 
-export const router = express.Router();
 
-
-router.get("/:city", async (req, res) => {
+export const getCity = async (city) => {
 
     try {
 
-        let response = await makeRequest(`http://api.geonames.org/searchJSON?username=${geoNamesUserName}&featureClass=P&country=SE&maxRows=5&name_startsWith=${req.params.city}`)
+        let response = await makeRequest(`http://api.geonames.org/searchJSON?username=${geoNamesUserName}&featureClass=P&country=SE&maxRows=1&name_startsWith=${city}`)
 
-        let cityList = []
+        let coordinates = {
+            cityName: response.geonames[0].name,
+            long: response.geonames[0].lng,
+            lat: response.geonames[0].lat,
+        };
 
-        response.geonames.map((city) => {
-
-            let foundCity = cityList.find(cityFromList => cityFromList.name == city.toponymName);
-
-            if(!foundCity) {
-                let CityObject = {
-                    cityName: city.toponymName,
-                    region: city.adminName1,
-                    long: city.lng,
-                    lat: city.lat,
-                };
-                cityList.push(CityObject);
-            }
-
-        })
-
-        res.json(cityList);
+        return coordinates;
 
     } catch(err) {
-        res.status(err.status).json(err.message);
+        return (err.status);
     }
+}
 
-})
