@@ -42,6 +42,10 @@ io.on("connection", (socket) => {
 
 
     /* Hugo */
+    // Recieves the message sent from client
+    socket.on("msg", (msgObj) => {
+        io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
+    })
 })
 
 
