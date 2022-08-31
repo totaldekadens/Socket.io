@@ -1,21 +1,16 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import express from 'express';
-import { router as cityRouter } from './api/weather/getCity.js'
-import { router as weatherRouter } from './api/weather/getWeather.js'
-import { router as gifRouter } from './api/gif/getGif.js'
+import { getCity } from "./api/weather/getCity.js";
+import { getWeather } from "./api/weather/getWeather.js";
 
 const app = express()
 const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
 
-app.use("/api/city", cityRouter);
-app.use("/api/weather", weatherRouter)
-app.use("/api/gif", gifRouter)
 
-
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
 
     io.emit("newSocketConnected", socket.id)
@@ -43,7 +38,27 @@ io.on("connection", (socket) => {
 
     /* Hugo */
     // Recieves the message sent from client
-    socket.on("msg", (msgObj) => {
+    socket.on("msg", async (msgObj) => {
+        console.log(msgObj.msg)
+
+        const msg = msgObj.msg.toString();
+
+        if(msg.startsWith("/w")) {
+
+            const city = msg.substring(3)
+
+            if(msg != "" || msg != " "){
+
+                const cityResponse = await getCity(city);
+                const weather =  await getWeather(cityResponse);
+
+                io.in(msgObj.joinedRoom).emit("msg", {msg: "Weather in: " + cityResponse.cityName + ".", nickname: socket.nickname, weather})
+
+                return;
+            }
+
+            return;
+        }
         io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
     })
 })

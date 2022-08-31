@@ -1,17 +1,13 @@
-import express from "express";
 import makeRequest from "../request.js";
 
 
-export const router = express.Router();
 
-
-
-router.get("/:long/:lat", async (req, res) => {
+export const getWeather = async(coordinates) => {
 
     try {
-
-        let response = await makeRequest(`https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${req.params.long}/lat/${req.params.lat}/data.json`);
-
+        
+        let response = await makeRequest(`https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/${coordinates.long}/lat/${coordinates.lat}/data.json`);
+        
         let weatherList = [];
 
         response.timeSeries.map((timeStamp) => {
@@ -23,12 +19,8 @@ router.get("/:long/:lat", async (req, res) => {
             let hour = time.getHours()
             weatherObject.hour = hour
 
-            let date = time.getDate()
-            weatherObject.date = date
-
             timeStamp.parameters.map((parameter) => {
-                
-                
+
                 if(parameter.name == "t") {
                     weatherObject.temp = parameter.values[0];
                 } else if(parameter.name = "Wsymb2") {
@@ -39,10 +31,9 @@ router.get("/:long/:lat", async (req, res) => {
             weatherList.push(weatherObject)
         })
 
-        res.json(weatherList)
+        return(weatherList[0])
 
-    } catch(e) {
-        console.error(e)
+    } catch(err) {
+        return (err.status);
     }
-
-})
+}
