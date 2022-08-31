@@ -3,9 +3,9 @@ import io from 'socket.io-client';
 
 export const socketInfoContext = createContext()
 
-export const SocketInfoProvider = ({ children }) => {
+const socket = io('http://localhost:3000', {autoConnect: false}); 
 
-    const socket = io('http://localhost:3000');
+export const SocketInfoProvider = ({ children }) => {
 
     const socketInfoRef = useRef()
     const [socketInfo, setSocketInfo] = useState({
@@ -13,7 +13,17 @@ export const SocketInfoProvider = ({ children }) => {
         joinedRoom: "",
         welcomeMsg: ""
     });
+
+    const connectSocket = () => {
+        socket.connect()
+    }
+
+    const getSocket = () => {
+        return socket
+    }
     
+    //console.log(socket)
+
     // socketInfoRef.current will always be updated with the latest from socketInfo 
     socketInfoRef.current = socketInfo
 
@@ -44,7 +54,7 @@ export const SocketInfoProvider = ({ children }) => {
     
 
     return (
-        <socketInfoContext.Provider value={{ socketInfo, setSocketInfo, socket }}>
+        <socketInfoContext.Provider value={{ socketInfo, setSocketInfo, getSocket, connectSocket, socket }}>
             {children}
         </socketInfoContext.Provider>
     );
