@@ -40,7 +40,6 @@ io.on("connection", async (socket) => {
     /* Hugo */
     // Recieves the message sent from client
     socket.on("msg", async (msgObj) => {
-        console.log(msgObj.msg)
 
         const msg = msgObj.msg.toString();
 
@@ -52,8 +51,8 @@ io.on("connection", async (socket) => {
 
                 const cityResponse = await getCity(city);
                 const weather =  await getWeather(cityResponse);
-                console.log(weather)
-                io.in(msgObj.joinedRoom).emit("msg", {msg: "Weather in: " + cityResponse.cityName + ".", nickname: socket.nickname, weather})
+
+                io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, weather})
 
                 return;
             }
@@ -66,8 +65,6 @@ io.on("connection", async (socket) => {
             const gifName = msg.substring(5)
 
             if(msg != "" || msg != " "){
-
-                console.log(gifName)
 
                 const gifUrl = await getGif(gifName)
 

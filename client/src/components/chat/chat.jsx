@@ -30,7 +30,9 @@ const Chat = () => {
             const newMsgList = [...msgRef.current];
             newMsgList.push({
                 nickname: msgObj.nickname,
-                message: msgObj.msg
+                message: msgObj.msg,
+                weather: msgObj.weather,
+                gifUrl: msgObj.gifUrl
             })
             setMsg(newMsgList)
         })
@@ -46,7 +48,7 @@ const Chat = () => {
             handleSubmit()
         }
     }
-    console.log(getMsg)
+
     return (
         <div className='chat' style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
 
@@ -61,7 +63,7 @@ const Chat = () => {
                     getMsg.map((msgObj, index) => {
                         return(
 
-                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message}/>
+                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message} weather={msgObj.weather} gifUrl={msgObj.gifUrl}/>
 
                         )
                     })
