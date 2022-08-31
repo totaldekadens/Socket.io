@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import express from 'express';
 import { getCity } from "./api/weather/getCity.js";
 import { getWeather } from "./api/weather/getWeather.js";
+import { getGif } from "./api/gif/getGif.js";
 
 const app = express()
 const httpServer = createServer(app);
@@ -53,6 +54,24 @@ io.on("connection", async (socket) => {
                 const weather =  await getWeather(cityResponse);
 
                 io.in(msgObj.joinedRoom).emit("msg", {msg: "Weather in: " + cityResponse.cityName + ".", nickname: socket.nickname, weather})
+
+                return;
+            }
+
+            return;
+        }
+
+        if(msg.startsWith("/gif")) {
+
+            const gifName = msg.substring(5)
+
+            if(msg != "" || msg != " "){
+
+                console.log(gifName)
+
+                const gifUrl = await getGif(gifName)
+
+                io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl})
 
                 return;
             }
