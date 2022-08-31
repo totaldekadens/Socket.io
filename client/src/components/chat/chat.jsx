@@ -7,13 +7,17 @@ import { socketInfoContext } from "../context/socketInfoProvider";
 const Chat = () => {
     
     // Context
-    const { socket, socketInfo, setSocketInfo } = useContext(socketInfoContext)
+    const { socketInfo, setSocketInfo, getSocket } = useContext(socketInfoContext)
     const [ getValue, setValue] = useState("")
     const msgRef = useRef()
     const [ getMsg, setMsg ] = useState([])
     msgRef.current = getMsg;
 
+    // Gets socket
+    let socket = getSocket()
+
     const handleSubmit = () => {
+        
         if(getValue != "" || getValue != " ") {
             socket.emit("msg", { msg: getValue, joinedRoom: socketInfo.joinedRoom })
             setValue("")
@@ -56,7 +60,9 @@ const Chat = () => {
                 {
                     getMsg.map((msgObj, index) => {
                         return(
-                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message} weather={msgObj.weather}/>
+
+                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message}/>
+
                         )
                     })
                 }

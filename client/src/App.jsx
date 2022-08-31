@@ -9,7 +9,7 @@ import SingleInput from './components/interaction/singleInput';
 function App() {
 
   // Context
-  const { socketInfo, setSocketInfo } = useContext(socketInfoContext)
+  const { socketInfo, setSocketInfo, connectSocket, getSocket} = useContext(socketInfoContext)
 
   // State
   const [shouldShowModal, setShouldShowModal] = useState(false)
@@ -24,6 +24,10 @@ function App() {
       socketInfoCopy.nickname = nickname
       setSocketInfo(socketInfoCopy)
       setShouldShowModal(false)
+      connectSocket()
+
+     // let hej = getSocket()
+      //console.log("ConnectSocket/Nickname: " + hej)
     }
 
   }
