@@ -20,7 +20,6 @@ io.on("connection", async (socket) => {
     
     // Join/Create room
     socket.on("join", (socketRoomData) => {
-        console.log("kommer in i join")
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
