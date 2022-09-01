@@ -13,7 +13,7 @@ const io = new Server(httpServer, {cors: {origin: "*"}});
 
 io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
-
+    io.emit("rooms", convertRoom())
     io.emit("newSocketConnected", socket.id)
 
     /* Ange */
@@ -23,18 +23,18 @@ io.on("connection", async (socket) => {
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
+        io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
     })
 
     // Get rooms
-    socket.on("getRooms", () => {
-        console.log(io.sockets.adapter.rooms)
-    })
-
+ 
 
     /* Fredrik */
-
-
+    socket.on("disconnect", () => {
+        io.emit("rooms", convertRoom())
+    })
+    
 
 
     /* Hugo */
@@ -81,7 +81,50 @@ io.on("connection", async (socket) => {
 
 
 
+const convertRoom = () => {
 
+    const convertedArray = Array.from(io.sockets.adapter.rooms)
+ 
+    const filteredRooms = convertedArray.filter(room => !room[1].has(room[0]) )
+    
+    const roomsWithSocketID = filteredRooms.map((roomArray) => {
+         return {room: roomArray[0], sockets: Array.from(roomArray[1])} 
+    })
+
+    
+
+    const roomsWithIdsAndNickname = roomsWithSocketID.map((roomObj) => {
+        
+
+        const nicknames = roomObj.sockets.map((socketId) => {
+            
+
+            
+            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname }
+        })
+        return {room: roomObj.room, sockets: nicknames}
+    })
+
+    return roomsWithIdsAndNickname
+    /* // NOTE: Alla ? skall ersättas med korrekt kod
+    // Gör om map till en array med arrayer
+    const convertedArray = Array.from(io.sockets.adapter.rooms)
+    // Filtrera bort samtliga sockets
+    const filteredRooms = convertedArray.filter(room => ?.has(?))
+    // Plocka ut rum med socketIDs
+    const roomsWithSocketID = filteredRooms.map((roomArray) => {
+        return {room: ?, sockets: Array.from(?)}
+    })
+    // Plocka ut rum med socketIDs och nicknames
+    const roomsWithIdsAndNickname = roomsWithSocketID.map((roomObj) => {
+        const nicknames = roomObj.sockets.map((socketId) => {
+            return { id: socketId, nickname: io.sockets.sockets.get(roomObj).nickname }
+        })
+        return {room: roomObj.room, sockets: nicknames}
+    })
+    return roomsWithIdsAndNickname */
+
+}
 
 httpServer.listen(port, () => {
     console.log("Server is running on port: " + port)
