@@ -10,6 +10,10 @@ export const getCity = async (city) => {
 
         let response = await makeRequest(`http://api.geonames.org/searchJSON?username=${geoNamesUserName}&featureClass=P&country=SE&maxRows=1&name_startsWith=${city}`)
 
+        if(!response.totalResultsCount) {
+            return false;
+        }
+
         let coordinates = {
             cityName: response.geonames[0].name,
             long: response.geonames[0].lng,

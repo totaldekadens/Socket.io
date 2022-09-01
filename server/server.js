@@ -54,36 +54,52 @@ io.on("connection", async (socket) => {
 
         const msg = msgObj.msg.toString();
 
-        if(msg.startsWith("/w")) {
+        const errMsg = "Could not find the command you were looking for, we currently only support /w (city) for weahter and /gif (search word) for GIF-images.";
 
-            const city = msg.substring(3)
+        if (msg.startsWith("/")) {
 
-            if(msg != "" || msg != " "){
+            if(msg.startsWith("/w")) {
 
-                const cityResponse = await getCity(city);
-                const weather =  await getWeather(cityResponse);
+                const city = msg.substring(3)
 
-                io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, weather})
+                if((/[a-zA-ZäöüÄÖÜß]/).test(city)){
 
+                    const cityResponse = await getCity(city);
+                    if(!cityResponse) {
+                        socket.emit('msg', {msg: "Could not find a city named: " + city, nickname: "Server:"});
+                        return
+                    }
+                    const weather =  await getWeather(cityResponse);
+
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, weather})
+
+                    return;
+                }
+                socket.emit('msg', {msg: errMsg, nickname: "Server:"});
                 return;
             }
 
-            return;
-        }
+            if(msg.startsWith("/gif")) {
+                
+                const gifName = msg.substring(5)
+                
+                if((/[a-zA-ZäöüÄÖÜß]/).test(gifName)){
 
-        if(msg.startsWith("/gif")) {
+                    const gifUrl = await getGif(gifName)
 
-            const gifName = msg.substring(5)
+                    if(!gifUrl) {
+                        socket.emit('msg', {msg: "Could not find a gif matching with: " + gifName, nickname: "Server:"});
+                        return
+                    }
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl})
 
-            if(msg != "" || msg != " "){
-
-                const gifUrl = await getGif(gifName)
-
-                io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl})
-
+                    return;
+                }
+                socket.emit('msg', {msg: errMsg, nickname: "Server:"});
                 return;
             }
 
+            socket.emit('msg', {msg: errMsg, nickname: "Server:"});
             return;
         }
         io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
