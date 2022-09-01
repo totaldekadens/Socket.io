@@ -10,11 +10,10 @@ const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
 
-const room = "" 
 
 io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
-
+    io.emit("rooms", convertRoom())
     io.emit("newSocketConnected", socket.id)
 
     /* Ange */
@@ -24,13 +23,10 @@ io.on("connection", async (socket) => {
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
+        io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
     })
 
-    // Get rooms
-    socket.on("getRooms", () => {
-        console.log(io.sockets.adapter.rooms)
-    })
 
     // shows/checks if someone is typing in a specific room
     socket.on("isTyping", (msgObj) => {
@@ -44,9 +40,10 @@ io.on("connection", async (socket) => {
     })
     
     /* Fredrik */
-
-
-
+    socket.on("disconnect", () => {
+        io.emit("rooms", convertRoom())
+    })
+    
 
     /* Hugo */
     // Recieves the message sent from client
@@ -108,7 +105,34 @@ io.on("connection", async (socket) => {
 
 
 
+const convertRoom = () => {
 
+    const convertedArray = Array.from(io.sockets.adapter.rooms)
+ 
+    const filteredRooms = convertedArray.filter(room => !room[1].has(room[0]) )
+    
+    const roomsWithSocketID = filteredRooms.map((roomArray) => {
+         return {room: roomArray[0], sockets: Array.from(roomArray[1])} 
+    })
+
+    
+
+    const roomsWithIdsAndNickname = roomsWithSocketID.map((roomObj) => {
+        
+
+        const nicknames = roomObj.sockets.map((socketId) => {
+            
+
+            
+            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname }
+        })
+        return {room: roomObj.room, sockets: nicknames}
+    })
+
+    return roomsWithIdsAndNickname
+ 
+
+}
 
 httpServer.listen(port, () => {
     console.log("Server is running on port: " + port)

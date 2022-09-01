@@ -81,7 +81,7 @@ const Chat = () => {
 
             <div className="chat__header">
                 <div className="chat__roomName">
-                    <h1 style={{color:"gray", marginBottom:"15px"}}>{socketInfo.joinedRoom}</h1>
+                    <h1 style={{color:"gray", marginBottom:"15px"}}># {socketInfo.joinedRoom}</h1>
                 </div>
             </div>
 
