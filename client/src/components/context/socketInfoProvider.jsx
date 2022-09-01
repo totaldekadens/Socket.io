@@ -47,7 +47,7 @@ export const SocketInfoProvider = ({ children }) => {
 
     }, [])
 
-    console.log(socketInfo)
+    
 
     // funktioner till emit ? 
 

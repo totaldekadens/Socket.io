@@ -37,11 +37,7 @@ const CreateRoom = () => {
         }
     }
 
-    // Temporary
-    const handleGetRooms = () => {
-        // console.log("getRooms: " + socket)
-        socket.emit("getRooms")
-    }
+   
 
     return (
     <>
@@ -53,8 +49,7 @@ const CreateRoom = () => {
                 <p>Skapa rum</p><AddBoxRoundedIcon/>
             </div> 
                     
-            {/* Temporary */}
-            <button style={{padding: "10px"}} onClick={handleGetRooms}>Hämta alla rum</button> 
+           
         </div>
         <Modal
             shouldShow={shouldShowModal}
