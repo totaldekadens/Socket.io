@@ -10,6 +10,7 @@ const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
 
+const room = "" 
 
 io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
@@ -31,7 +32,17 @@ io.on("connection", async (socket) => {
         console.log(io.sockets.adapter.rooms)
     })
 
+    // shows/checks if someone is typing in a specific room
+    socket.on("isTyping", (msgObj) => {
 
+        if(msgObj.isTyping) {
+            socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: socket.nickname, isTyping: true});
+        } else {
+            socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: "", isTyping: false});
+        }
+        
+    })
+    
     /* Fredrik */
 
 

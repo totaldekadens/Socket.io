@@ -2,6 +2,7 @@ import { useContext, useEffect, useState, useRef } from "react"
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Msg from './msg';
 import { socketInfoContext } from "../context/socketInfoProvider";
+import BeatLoader from 'react-spinners/BeatLoader';
 
 
 const Chat = () => {
@@ -12,7 +13,9 @@ const Chat = () => {
     const msgRef = useRef()
     const [ getMsg, setMsg ] = useState([])
     msgRef.current = getMsg;
-
+    const [isTyping, setTyping] = useState(false)
+    const [buddyIsTyping, setBuddyIsTyping] = useState({nickname: "", isTyping: false})
+    
     // Gets socket
     let socket = getSocket()
 
@@ -24,6 +27,8 @@ const Chat = () => {
         }
     }
 
+
+    // Receives message from senders
     useEffect(() => {
 
         socket.on("msg", (msgObj) => {
@@ -38,6 +43,28 @@ const Chat = () => {
         })
 
     }, [])
+
+    // Receives and sends status if someone is typing 
+    useEffect(() => {
+
+        if(getValue.length > 0) {
+            setTyping(true)
+        } else {
+            setTyping(false)
+        }
+
+        socket.emit("isTyping", { joinedRoom: socketInfo.joinedRoom, isTyping })
+
+        socket.on("isTyping", (msgObj) => {
+            setBuddyIsTyping({
+                nickname: msgObj.nickname,
+                isTyping: msgObj.isTyping
+            })
+        })
+
+    }, [getValue, isTyping])
+
+
 
     const handleKeyPress = (event) => {
         if (event.key == "Enter" && event.shiftKey) {
@@ -54,7 +81,7 @@ const Chat = () => {
 
             <div className="chat__header">
                 <div className="chat__roomName">
-                    <h1 style={{color:"gray", marginBottom:"15px"}}># ROOOOOM</h1>
+                    <h1 style={{color:"gray", marginBottom:"15px"}}>{socketInfo.joinedRoom}</h1>
                 </div>
             </div>
 
@@ -68,6 +95,10 @@ const Chat = () => {
                         )
                     })
                 }
+                <div style={{display: "flex", justifyContent: "flex-end"}}>
+                    {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname} skriver</div></> : ""}
+                </div>
+                
             </div>
 
             <div className="chat__input" style={{ maxHeight: "50%", display: "flex", padding: "10px", margin:"0 15px 40px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
