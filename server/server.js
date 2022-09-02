@@ -37,6 +37,12 @@ io.on("connection", async (socket) => {
     socket.on("disconnect", () => {
         io.emit("rooms", convertRoom())
     })
+
+    socket.on("leave", (room) => {
+        socket.leave(room)
+        
+        io.emit("rooms", convertRoom())
+    })
     
 
     /* Hugo */
