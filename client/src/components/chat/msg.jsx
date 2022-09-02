@@ -1,23 +1,54 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useContext, useEffect, useState, useRef } from "react"
+import { margin } from '@mui/system';
+
 
 const Msg = (props) => {
 
+    
+
+
+
+    console.log()
     return (
-        <div style={{with: "100%", display:"flex", flexDirection: "column"}}>
-            <p style={{fontSize:"16px", margin:"5px 0px", fontWeight:"bolder"}}>{props.nickname}</p>
-            {!props.gifUrl ? (
-                <p style={{fontSize:"14px", margin:"5px 0px 30px 0px", color:"#d9d9d9"}}>{props.message}</p>
-            ): undefined}
-            {props.weather ? (
-                <div style={{display: "flex", alignItems:"center"}}>
-                    <img style={{maxWidth: "50px", maxHeight: "50px"}} src={props.weather.symbol} />
-                    <h2 style={{marginLeft: "30px"}}>{props.weather.temp} ℃</h2>
-                </div>
-            ): undefined}
-            {props.gifUrl ? (
-                <img style={{maxWidth: "300px", maxHeight: "300px"}} src={props.gifUrl} />
-                ): undefined}
+        <div style={container} >
+
+            <AccountCircleIcon style={{ color: props.avatarColor, fontSize: "45px" }} />
+
+            <div style={msgContainer}>
+                
+                <p style={{ fontSize: "18px", fontWeight: "bolder", width: "100%" }}>{props.nickname}</p> 
+
+
+                {!props.gifUrl ? (
+                    <p style={{ fontSize: "14px", margin: "", color: "#d9d9d9" , fontWeight: "lighter"}}>{props.message}</p>
+                ) : undefined}
+                {props.weather ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                        <img style={{ maxWidth: "50px", maxHeight: "50px" }} src={props.weather.symbol} />
+                        <h2 style={{ marginLeft: "30px" }}>{props.weather.temp} ℃</h2>
+                    </div>
+                ) : undefined}
+                {props.gifUrl ? (
+                    <img style={{ maxWidth: "300px", maxHeight: "300px" }} src={props.gifUrl} />
+                ) : undefined}
+            </div>
+
+
+
+
         </div>
     )
+}
+
+const container = {
+    with: "100%", 
+    display: "flex" 
+}
+
+const msgContainer = {
+    marginLeft: "20px",
+    marginBottom:"20px"
 }
 
 export default Msg
