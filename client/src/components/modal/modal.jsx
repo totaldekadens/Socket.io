@@ -44,7 +44,8 @@ const ModalBody = {
 	margin: "10% auto",
 	padding: "20px",
 	maxWidth: "475px",
-    borderRadius: "10px"
+    borderRadius: "10px",
+    boxShadow: "0px 0px 30px black"
 }
 
 export default Modal

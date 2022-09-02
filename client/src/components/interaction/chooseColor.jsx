@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ChooseColor = (props) => {
 
@@ -27,18 +28,18 @@ const ChooseColor = (props) => {
     const list = ["red", "blue", "green", "purple", "yellow"]
 
     return (
-        <Box sx={{ minWidth: 120, margin: "30px 0px 10px 0px"}}>
+        <Box sx={{ width: "130px", margin: "30px 0px 10px 0px"}}>
             <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Välj färg</InputLabel>
+                <InputLabel id="demo-simple-select-label">Välj avatar</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={color}
-                    label="Välj färg"
+                    label="Välj avatar"
                     onChange={handleChange}
                 >
                     {list.map((clr) => {
-                        return <MenuItem key={clr} value={clr}>{clr}</MenuItem>
+                        return <MenuItem key={clr} value={clr}><AccountCircleIcon style={{color: clr, fontSize:"50px"}}/></MenuItem>
                     })}
                 </Select>
             </FormControl>
