@@ -44,9 +44,12 @@ const CreateRoom = () => {
         <div style={{display: "flex", flexDirection: "column", padding: "10px"}}>
             <div 
                 style={container} 
-                onClick={() => setShouldShowModal(true)}
+                
             >
+                <div  onClick={() => setShouldShowModal(true)} style={{display:"flex", gap:"20px", alignItems:"center",cursor: "pointer",}}>
                 <p>Skapa rum</p><AddBoxRoundedIcon/>
+
+                </div>
             </div> 
                     
            
@@ -74,7 +77,7 @@ const container = {
     width: "100%", 
     display: "flex", 
     justifyContent: "flex-end", 
-    cursor: "pointer",
+    
     color: "white",
     fontSize:"25px",
     columnGap: "5px",
