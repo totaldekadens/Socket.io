@@ -28,7 +28,8 @@ const CreateRoom = () => {
             socket.emit("join", {
                 roomToLeave: socketInfo.joinedRoom, 
                 roomToJoin: room, 
-                nickname: socketInfo.nickname
+                nickname: socketInfo.nickname,
+                avatarColor: socketInfo.avatarColor
             })
     
             socketInfoCopy.joinedRoom = room
@@ -38,7 +39,7 @@ const CreateRoom = () => {
         }
     }
 
-   
+
 
     return (
     <>
@@ -52,15 +53,12 @@ const CreateRoom = () => {
 
                 </div>
             </div> 
-                    
-           
         </div>
         <Modal
             shouldShow={shouldShowModal}
             onRequestClose={() => setShouldShowModal(false)}
             isGetStarted={false}
         >
-            
             <SingleInput
                 state={room}
                 setState={setRoom}

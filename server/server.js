@@ -23,6 +23,7 @@ io.on("connection", async (socket) => {
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
+        socket.avatarColor = socketRoomData.avatarColor
         io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
     })
@@ -124,7 +125,7 @@ const convertRoom = () => {
             
 
             
-            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname }
+            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname, avatarColor: io.sockets.sockets.get(socketId).avatarColor }
         })
         return {room: roomObj.room, sockets: nicknames}
     })
