@@ -30,13 +30,7 @@ io.on("connection", async (socket) => {
 
     // shows/checks if someone is typing in a specific room
     socket.on("isTyping", (msgObj) => {
-        
-        if(msgObj.isTyping) {
-            socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: socket.nickname, isTyping: true});
-        } else {
-            socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: "", isTyping: false});
-        }
-        
+        socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: socket.nickname, isTyping: msgObj.isTyping});
     })
     
     /* Fredrik */

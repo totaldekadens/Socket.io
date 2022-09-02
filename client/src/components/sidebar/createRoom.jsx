@@ -4,6 +4,7 @@ import Modal from '../modal/modal'
 import SingleInput from "../interaction/singleInput";
 import AddBoxRoundedIcon from '@mui/icons-material/AddBoxRounded';
 
+
 const CreateRoom = () => {
 
     // Context
@@ -59,6 +60,7 @@ const CreateRoom = () => {
             onRequestClose={() => setShouldShowModal(false)}
             isGetStarted={false}
         >
+            
             <SingleInput
                 state={room}
                 setState={setRoom}
