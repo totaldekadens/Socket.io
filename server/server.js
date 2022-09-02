@@ -30,7 +30,7 @@ io.on("connection", async (socket) => {
 
     // shows/checks if someone is typing in a specific room
     socket.on("isTyping", (msgObj) => {
-
+        
         if(msgObj.isTyping) {
             socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: socket.nickname, isTyping: true});
         } else {
@@ -41,6 +41,12 @@ io.on("connection", async (socket) => {
     
     /* Fredrik */
     socket.on("disconnect", () => {
+        io.emit("rooms", convertRoom())
+    })
+
+    socket.on("leave", (room) => {
+        socket.leave(room)
+        
         io.emit("rooms", convertRoom())
     })
     

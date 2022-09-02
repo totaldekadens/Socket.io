@@ -26,8 +26,6 @@ function App() {
       setShouldShowModal(false)
       connectSocket()
 
-     // let hej = getSocket()
-      //console.log("ConnectSocket/Nickname: " + hej)
     }
 
   }

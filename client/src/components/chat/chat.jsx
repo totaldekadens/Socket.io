@@ -41,7 +41,9 @@ const Chat = () => {
             })
             setMsg(newMsgList)
         })
-
+        return () => {
+            socket.off('msg');
+        };
     }, [])
 
     // Receives and sends status if someone is typing 
@@ -61,6 +63,10 @@ const Chat = () => {
                 isTyping: msgObj.isTyping
             })
         })
+
+        return () => {
+            socket.off('isTyping');
+        };
 
     }, [getValue, isTyping])
 
