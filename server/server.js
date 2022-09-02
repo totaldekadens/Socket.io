@@ -69,7 +69,7 @@ io.on("connection", async (socket) => {
                     }
                     const weather =  await getWeather(cityResponse);
 
-                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, weather})
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, avatarColor: msgObj.avatarColor , weather})
 
                     return;
                 }
@@ -89,7 +89,7 @@ io.on("connection", async (socket) => {
                         socket.emit('msg', {msg: "Could not find a gif matching with: " + gifName, nickname: "Server:"});
                         return
                     }
-                    io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl})
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl, avatarColor: msgObj.avatarColor})
 
                     return;
                 }
@@ -100,7 +100,7 @@ io.on("connection", async (socket) => {
             socket.emit('msg', {msg: errMsg, nickname: "Server:"});
             return;
         }
-        io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
+        io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname, avatarColor: msgObj.avatarColor})
     })
 })
 
