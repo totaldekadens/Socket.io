@@ -16,31 +16,43 @@ const Chat = () => {
     const [isTyping, setTyping] = useState(false)
     const [buddyIsTyping, setBuddyIsTyping] = useState({nickname: "", isTyping: false})
     
+    const myRef = useRef(500);
+
+
     // Gets socket
     let socket = getSocket()
 
     const handleSubmit = () => {
         
         if(getValue != "" || getValue != " ") {
-            socket.emit("msg", { msg: getValue, joinedRoom: socketInfo.joinedRoom })
+            socket.emit("msg", { msg: getValue, joinedRoom: socketInfo.joinedRoom, avatarColor: socketInfo.avatarColor })
             setValue("")
+            
         }
     }
-
-
+    const executeScroll = () => myRef.current.scrollIntoView({
+        behavior: "auto",
+        top: myRef.current.offsetTop + 500
+    })
+    console.log(myRef.current.offsetTop)
     // Receives message from senders
     useEffect(() => {
 
         socket.on("msg", (msgObj) => {
             const newMsgList = [...msgRef.current];
+           
             newMsgList.push({
                 nickname: msgObj.nickname,
                 message: msgObj.msg,
+                avatarColor: msgObj.avatarColor,
                 weather: msgObj.weather,
                 gifUrl: msgObj.gifUrl
             })
+            
             setMsg(newMsgList)
+            executeScroll()
         })
+        
         return () => {
             socket.off('msg');
         };
@@ -63,10 +75,12 @@ const Chat = () => {
                 isTyping: msgObj.isTyping
             })
         })
-
+       
+        
         return () => {
             socket.off('isTyping');
         };
+
 
     }, [getValue, isTyping])
 
@@ -91,24 +105,33 @@ const Chat = () => {
                 </div>
             </div>
 
+            
             <div className="chat__messages" style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
                 {
                     getMsg.map((msgObj, index) => {
                         return(
 
-                            <Msg key={index} nickname={msgObj.nickname} message={msgObj.message} weather={msgObj.weather} gifUrl={msgObj.gifUrl}/>
+                            <Msg key={index} 
+                            nickname={msgObj.nickname} 
+                            message={msgObj.message} 
+                            weather={msgObj.weather} 
+                            gifUrl={msgObj.gifUrl}
+                            avatarColor= {msgObj.avatarColor}
+                            />
 
                         )
                     })
+                   
                 }
-                <div style={{display: "flex", justifyContent: "flex-end"}}>
-                    {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname} skriver</div></> : ""}
-                </div>
-                
+               
+               <div ref={myRef} className="helloooo_____hej" style={{backgroundColor:"orange"}} />
             </div>
-
+           
+            <div style={{display: "flex",padding:"20px"}}>
+                    {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname}</div></> : ""}
+                </div> 
             <div className="chat__input" style={{ maxHeight: "50%", display: "flex", padding: "10px", margin:"0 15px 40px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
-
+                
                 <TextareaAutosize
                     aria-label="empty textarea"
                     placeholder="#Message someone in chat.."

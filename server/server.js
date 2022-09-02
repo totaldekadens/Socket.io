@@ -23,6 +23,7 @@ io.on("connection", async (socket) => {
         socket.leave(socketRoomData.roomToLeave)
         socket.join(socketRoomData.roomToJoin)
         socket.nickname = socketRoomData.nickname
+        socket.avatarColor = socketRoomData.avatarColor
         io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
     })
@@ -68,7 +69,7 @@ io.on("connection", async (socket) => {
                     }
                     const weather =  await getWeather(cityResponse);
 
-                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, weather})
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, avatarColor: msgObj.avatarColor , weather})
 
                     return;
                 }
@@ -88,7 +89,7 @@ io.on("connection", async (socket) => {
                         socket.emit('msg', {msg: "Could not find a gif matching with: " + gifName, nickname: "Server:"});
                         return
                     }
-                    io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl})
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl, avatarColor: msgObj.avatarColor})
 
                     return;
                 }
@@ -99,7 +100,7 @@ io.on("connection", async (socket) => {
             socket.emit('msg', {msg: errMsg, nickname: "Server:"});
             return;
         }
-        io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname})
+        io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname, avatarColor: msgObj.avatarColor})
     })
 })
 
@@ -124,7 +125,7 @@ const convertRoom = () => {
             
 
             
-            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname }
+            return { id: socketId, nickname: io.sockets.sockets.get(socketId).nickname, avatarColor: io.sockets.sockets.get(socketId).avatarColor }
         })
         return {room: roomObj.room, sockets: nicknames}
     })

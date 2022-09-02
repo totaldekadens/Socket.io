@@ -2,13 +2,12 @@
 import UsersInRoom from "./usersInRoom"
 import { useContext, useEffect, useState, useRef } from "react"
 import { socketInfoContext } from "../context/socketInfoProvider";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { io } from "socket.io-client";
+
 
 
 const ListOfRooms = () => {
@@ -37,8 +36,7 @@ const ListOfRooms = () => {
     }, [])
 
     const buttonHandler = (room) => {
-      
-            console.log(room)
+
             if(room === socketInfo.joinedRoom){
                 socket.emit("leave", room)
                 
@@ -49,17 +47,17 @@ const ListOfRooms = () => {
                 socket.emit("join", {
                     roomToLeave: socketInfo.joinedRoom, 
                     roomToJoin: room, 
-                    nickname: socketInfo.nickname
+                    nickname: socketInfo.nickname,
+                    avatarColor: socketInfo.avatarColor
                 })
                 socketInfoCopy.joinedRoom = room
                 setSocketInfo(socketInfoCopy)
             }
 
-    
-           
-            
-        
+    }
 
+    const setButtonColor = (e, color) => {
+        e.target.style.background = color;
     }
 
     return (
@@ -69,26 +67,31 @@ const ListOfRooms = () => {
             <div style={listContainerStyle}>
                 {
                     getRoom.length > 0 ? (
-                        getRoom.map((room) => {
+                        getRoom.map((room, index) => {
 
                             return (
-                                <div style={listitemContainer} key={room.room}>
-                                    <Accordion style={{ width: "100%", backgroundColor: "#484848", border: "0", boxShadow: "none" }}>
+                                <div style={listitemContainer} key={index}>
+                                    <Accordion style={{ width: "100%", backgroundColor: "#484848", boxShadow: "none"}}>
                                         <AccordionSummary
-                                            expandIcon={<ExpandMoreIcon />}
+                                            expandIcon={<ExpandMoreIcon style={{color: "white"}}/>}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
                                         >
-                                            <Typography style={{ color: "white" }}># {room.room}</Typography>
+                                            <div style={{width: "100%", paddingRight: "5px", display: "flex", justifyContent: "space-between" }}>
+                                                <Typography style={{ color: "white" }}># {room.room}</Typography>
+                                                <Typography style={{ color: "white" }}>({room.sockets.length})</Typography>
+                                            </div>
                                         </AccordionSummary>
                                         <AccordionDetails>
-                                            <UsersInRoom users={room.sockets} room={room.room} />
-                                        
-                                            <div onClick={() => buttonHandler(room.room)} style={{...buttonStyle, backgroundColor: socketInfo.joinedRoom == room.room ? "red": "green"}}>
-                                                <p style={{ color: "white" }}>{ socketInfo.joinedRoom == room.room ? "Lämna" : "Anslut"}</p> {/* Use context to check if the room = the room that the user is connected to. And render "leave" instead of "connect". */}
+                                            <UsersInRoom users={room.sockets} room={room.room}/>
+                                            <div 
+                                                onClick={() => buttonHandler(room.room)} 
+                                                style={{...buttonStyle, backgroundColor: socketInfo.joinedRoom == room.room ? "red": "green"}}
+                                                onMouseOver={(e) => {setButtonColor(e, socketInfo.joinedRoom == room.room ? "#ff6347": "#006400")}}
+                                                onMouseOut={(e) => {setButtonColor(e, socketInfo.joinedRoom == room.room ? "red": "green")}}
+                                            >
+                                                <p style={{ color: "white", padding:"3px" }}>{ socketInfo.joinedRoom == room.room ? "Lämna" : "Anslut"}</p> {/* Use context to check if the room = the room that the user is connected to. And render "leave" instead of "connect". */}
                                             </div>
-
-                                         
                                         </AccordionDetails>
 
                                     </Accordion>
@@ -104,7 +107,7 @@ const ListOfRooms = () => {
 }
 
 const listContainerStyle = {
-    maxWidth: "200px",
+    maxWidth: "90%",
     marginTop: "20px",
     display: "flex",
     flexDirection: "column",
@@ -117,15 +120,16 @@ const listitemContainer = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
+    borderBottom: "1px solid grey"
 }
 
 
 const buttonStyle = {
-    padding: "3px",
     marginTop: "20px",
     width: "70px",
     textAlign: "center",
-    borderRadius: "5px"
+    borderRadius: "5px",
+    cursor: "pointer"
 }
 
 
