@@ -11,7 +11,8 @@ export const SocketInfoProvider = ({ children }) => {
     const [socketInfo, setSocketInfo] = useState({
         nickname: "", 
         joinedRoom: "",
-        welcomeMsg: ""
+        welcomeMsg: "",
+        avatarColor: "white"
     });
 
     const connectSocket = () => {
@@ -22,7 +23,7 @@ export const SocketInfoProvider = ({ children }) => {
         return socket
     }
     
-    //console.log(socket)
+    console.log(socketInfo)
 
     // socketInfoRef.current will always be updated with the latest from socketInfo 
     socketInfoRef.current = socketInfo
@@ -47,11 +48,6 @@ export const SocketInfoProvider = ({ children }) => {
 
     }, [])
 
-    
-
-    // funktioner till emit ? 
-
-    
 
     return (
         <socketInfoContext.Provider value={{ socketInfo, setSocketInfo, getSocket, connectSocket, socket }}>

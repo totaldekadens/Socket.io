@@ -6,6 +6,7 @@ import { socketInfoContext } from './components/context/socketInfoProvider';
 import Modal from './components/modal/modal';
 import SingleInput from './components/interaction/singleInput';
 
+
 function App() {
 
   // Context
@@ -55,6 +56,7 @@ function App() {
           label="Fyll i ditt smeknamn..."
           btnLabel="Fortsätt"
           title="Välkommen till chatten!"
+          isGetStarted={true}
         />
       </Modal>
     </div>
