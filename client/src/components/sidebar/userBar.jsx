@@ -29,7 +29,7 @@ const UserBar = () => {
                 style={{background: "red", cursor: "pointer", borderRadius: "5px"}} 
                 onClick={() => buttonHandler(socketInfo.joinedRoom)}
                 >
-                <p style={{padding: "3px"}}>Lämna rum</p>
+                <p style={{padding: "5px"}}>Lämna rum</p>
             </div>
         ): undefined}
         </div>
