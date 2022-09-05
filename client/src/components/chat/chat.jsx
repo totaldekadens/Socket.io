@@ -6,16 +6,16 @@ import BeatLoader from 'react-spinners/BeatLoader';
 
 
 const Chat = () => {
-    
+
     // Context
     const { socketInfo, setSocketInfo, getSocket } = useContext(socketInfoContext)
-    const [ getValue, setValue] = useState("")
+    const [getValue, setValue] = useState("")
     const msgRef = useRef()
-    const [ getMsg, setMsg ] = useState([])
+    const [getMsg, setMsg] = useState([])
     msgRef.current = getMsg;
     const [isTyping, setTyping] = useState(false)
-    const [buddyIsTyping, setBuddyIsTyping] = useState({nickname: "", isTyping: false})
-    
+    const [buddyIsTyping, setBuddyIsTyping] = useState({ nickname: "", isTyping: false })
+
     const myRef = useRef(500);
 
 
@@ -23,11 +23,10 @@ const Chat = () => {
     let socket = getSocket()
 
     const handleSubmit = () => {
-        
-        if(getValue != "" || getValue != " ") {
+
+        if (getValue.trim().length > 0) {
             socket.emit("msg", { msg: getValue, joinedRoom: socketInfo.joinedRoom, avatarColor: socketInfo.avatarColor })
             setValue("")
-            
         }
     }
     const executeScroll = () => myRef.current.scrollIntoView({
@@ -40,7 +39,7 @@ const Chat = () => {
 
         socket.on("msg", (msgObj) => {
             const newMsgList = [...msgRef.current];
-           
+
             newMsgList.push({
                 nickname: msgObj.nickname,
                 message: msgObj.msg,
@@ -48,11 +47,11 @@ const Chat = () => {
                 weather: msgObj.weather,
                 gifUrl: msgObj.gifUrl
             })
-            
+
             setMsg(newMsgList)
-           // executeScroll()
+
         })
-        
+
         return () => {
             socket.off('msg');
         };
@@ -61,7 +60,7 @@ const Chat = () => {
     // Receives and sends status if someone is typing 
     useEffect(() => {
 
-        if(getValue.length > 0) {
+        if (getValue.length > 0) {
             setTyping(true)
         } else {
             setTyping(false)
@@ -75,7 +74,7 @@ const Chat = () => {
                 isTyping: msgObj.isTyping
             })
         })
-        
+
         return () => {
             socket.off('isTyping');
         };
@@ -92,54 +91,55 @@ const Chat = () => {
             return
         }
         if (event.key === 'Enter') {
+            console.log("kommer in i enter")
             event.preventDefault();
             handleSubmit()
         }
     }
 
     return (
-        <div className='chat' style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
+        <div className='chat' style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow: "hidden", padding: "20px" }}>
 
             <div className="chat__header">
                 <div className="chat__roomName">
-                    <h1 style={{color:"gray", marginBottom:"15px"}}># {socketInfo.joinedRoom}</h1>
+                    <h1 style={{ color: "gray", marginBottom: "15px" }}># {socketInfo.joinedRoom}</h1>
                 </div>
             </div>
 
-            
-            <div className="chat__messages" style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
+
+            <div className="chat__messages" style={{ flexGrow: 1, flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
                 {
                     getMsg.map((msgObj, index) => {
-                        return(
+                        return (
 
-                            <Msg key={index} 
-                            nickname={msgObj.nickname} 
-                            message={msgObj.message} 
-                            weather={msgObj.weather} 
-                            gifUrl={msgObj.gifUrl}
-                            avatarColor= {msgObj.avatarColor}
+                            <Msg key={index}
+                                nickname={msgObj.nickname}
+                                message={msgObj.message}
+                                weather={msgObj.weather}
+                                gifUrl={msgObj.gifUrl}
+                                avatarColor={msgObj.avatarColor}
                             />
 
                         )
                     })
-                   
+
                 }
-               
-               <div ref={myRef} className="helloooo_____hej" style={{backgroundColor:"orange"}} />
+
+                <div ref={myRef} className="helloooo_____hej" style={{ backgroundColor: "orange" }} />
             </div>
-           
-            <div style={{display: "flex",padding:"20px"}}>
-                    {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname}</div></> : ""}
-                </div> 
-            <div className="chat__input" style={{ maxHeight: "50%", display: "flex", padding: "10px", margin:"0 15px 40px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
-                
+
+            <div style={{ display: "flex", padding: "20px" }}>
+                {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{ marginLeft: "10px" }}>{buddyIsTyping.nickname}</div></> : ""}
+            </div>
+            <div className="chat__input" style={{ maxHeight: "50%", display: "flex", padding: "10px", margin: "0 15px 40px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
+
                 <TextareaAutosize
                     aria-label="empty textarea"
                     placeholder="#Message someone in chat.."
                     maxRows={14}
-                    style={{ hight:"100%",width: "80%", resize: 'none', overflow:"hidden", background: "transparent", outlineWidth: "0px", marginLeft:"5px",color: "white", border: "none", fontSize: "16px" }}
+                    style={{ hight: "100%", width: "80%", resize: 'none', overflow: "hidden", background: "transparent", outlineWidth: "0px", marginLeft: "5px", color: "white", border: "none", fontSize: "16px" }}
                     onKeyPress={handleKeyPress}
-                    onChange={(event) => {setValue(event.target.value)}}
+                    onChange={(event) => { setValue(event.target.value) }}
                     value={getValue}
                 />
                 <button onClick={handleSubmit} style={{}}>SEND</button>
