@@ -32,9 +32,9 @@ const Chat = () => {
     }
     const executeScroll = () => myRef.current.scrollIntoView({
         behavior: "auto",
-        top: myRef.current.offsetTop + 500
     })
-    console.log(myRef.current.offsetTop)
+
+
     // Receives message from senders
     useEffect(() => {
 
@@ -50,7 +50,7 @@ const Chat = () => {
             })
             
             setMsg(newMsgList)
-            executeScroll()
+           // executeScroll()
         })
         
         return () => {
@@ -75,7 +75,6 @@ const Chat = () => {
                 isTyping: msgObj.isTyping
             })
         })
-       
         
         return () => {
             socket.off('isTyping');
@@ -84,7 +83,9 @@ const Chat = () => {
 
     }, [getValue, isTyping])
 
-
+    useEffect(() => {
+        executeScroll()
+    }, [getMsg])
 
     const handleKeyPress = (event) => {
         if (event.key == "Enter" && event.shiftKey) {
