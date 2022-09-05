@@ -64,7 +64,6 @@ const ListOfRooms = () => {
                 {
                     getRoom.length > 0 ? (
                         getRoom.map((room, index) => {
-                            console.log(socketInfo.joinedRoom == room.room )
                             
                             return (
                                 <div style={listitemContainer} key={index}>
