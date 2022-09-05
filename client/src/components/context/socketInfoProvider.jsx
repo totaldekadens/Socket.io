@@ -3,13 +3,13 @@ import io from 'socket.io-client';
 
 export const socketInfoContext = createContext()
 
-const socket = io('http://localhost:3000', {autoConnect: false}); 
+const socket = io('http://localhost:3000', { autoConnect: false });
 
 export const SocketInfoProvider = ({ children }) => {
 
     const socketInfoRef = useRef()
     const [socketInfo, setSocketInfo] = useState({
-        nickname: "", 
+        nickname: "",
         joinedRoom: "",
         welcomeMsg: "",
         avatarColor: "white"
@@ -22,8 +22,6 @@ export const SocketInfoProvider = ({ children }) => {
     const getSocket = () => {
         return socket
     }
-    
-    console.log(socketInfo)
 
     // socketInfoRef.current will always be updated with the latest from socketInfo 
     socketInfoRef.current = socketInfo
@@ -36,7 +34,7 @@ export const SocketInfoProvider = ({ children }) => {
 
         // Welcomes user when joining new room 
         socket.on("welcome", (msg) => {
-            let socketInfoCopy = {...socketInfoRef.current}
+            let socketInfoCopy = { ...socketInfoRef.current }
             socketInfoCopy.welcomeMsg = msg
             setSocketInfo(socketInfoCopy)
         })
