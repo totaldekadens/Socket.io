@@ -26,7 +26,7 @@ const UserBar = () => {
             </div>
             {socketInfo.joinedRoom != "" ? (
             <div 
-                style={{background: "red", cursor: "pointer", borderRadius: "5px"}} 
+                style={{background: "red", cursor: "pointer", borderRadius: "5px", width: "100px", textAlign: "center"}} 
                 onClick={() => buttonHandler(socketInfo.joinedRoom)}
                 >
                 <p style={{padding: "5px"}}>Lämna rum</p>

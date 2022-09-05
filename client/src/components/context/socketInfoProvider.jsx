@@ -12,8 +12,11 @@ export const SocketInfoProvider = ({ children }) => {
         nickname: "",
         joinedRoom: "",
         welcomeMsg: "",
-        avatarColor: "white"
+        avatarColor: "white",
+        commandList: []
     });
+
+    
 
     const connectSocket = () => {
         socket.connect()
@@ -37,6 +40,13 @@ export const SocketInfoProvider = ({ children }) => {
             let socketInfoCopy = { ...socketInfoRef.current }
             socketInfoCopy.welcomeMsg = msg
             setSocketInfo(socketInfoCopy)
+        })
+
+        socket.on("commandList", (commandList) => {
+            const socketInfoCopy = {...socketInfo};
+            socketInfoCopy.commandList = commandList;
+            setSocketInfo(socketInfoCopy)
+
         })
 
         return () => {

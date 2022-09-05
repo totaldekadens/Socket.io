@@ -97,7 +97,7 @@ const Chat = () => {
             handleSubmit()
         }
     }
-
+    console.log(socketInfo.commandList)
     return (
         <div style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
 
@@ -138,6 +138,22 @@ const Chat = () => {
             <div style={{display: "flex",padding:"20px"}}>
                     {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname}</div></> : ""}
             </div>
+                { getValue === "/" ? (
+                <div style={commandStyle}>
+                    <h4>Tillgängliga kommandon:</h4>
+                    {
+                        socketInfo.commandList.map((command) => {
+
+                            return (
+                                <div style={{padding: "5px"}}>
+                                        {command.command} - {command.desc}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+                ) : undefined
+                }
             <div style={{ maxHeight: "50%", display: "flex", justifyContent: "space-between", padding: "10px", margin:"0 15px 0px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
                 <TextareaAutosize
                     aria-label="empty textarea"
@@ -154,6 +170,18 @@ const Chat = () => {
             ): undefined}
         </div>
     )
+}
+
+
+const commandStyle = {
+    margin: "0 15px",
+    marginBottom: "5px",
+    padding: "10px",
+    backgroundColor: "#474b53",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+    borderRadius: "5px"
 }
 
 
