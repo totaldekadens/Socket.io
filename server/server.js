@@ -52,7 +52,7 @@ io.on("connection", async (socket) => {
 
         const msg = msgObj.msg.toString();
 
-        const errMsg = "Could not find the command you were looking for, we currently only support /w (city) for weahter and /gif (search word) for GIF-images.";
+        const errMsg = "Kunde inte hitta kommandot som du letade efter, just nu så kan man bara skriva in /w (stad) för väder och /gif (sökord) för GIF-bilder.";
 
         if (msg.startsWith("/")) {
 
@@ -64,12 +64,12 @@ io.on("connection", async (socket) => {
 
                     const cityResponse = await getCity(city);
                     if(!cityResponse) {
-                        socket.emit('msg', {msg: "Could not find a city named: " + city, nickname: "Server:"});
+                        socket.emit('msg', {msg: "Vi kunde inte hitta en stad som heter: " + city, nickname: "Server:"});
                         return
                     }
                     const weather =  await getWeather(cityResponse);
 
-                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Current weather in " + cityResponse.cityName + ":", nickname: socket.nickname, avatarColor: msgObj.avatarColor , weather})
+                    io.in(msgObj.joinedRoom).emit("msg", {msg: "Såhär är vädret i " + cityResponse.cityName + ":", nickname: socket.nickname, avatarColor: msgObj.avatarColor, weather})
 
                     return;
                 }
@@ -86,7 +86,7 @@ io.on("connection", async (socket) => {
                     const gifUrl = await getGif(gifName)
 
                     if(!gifUrl) {
-                        socket.emit('msg', {msg: "Could not find a gif matching with: " + gifName, nickname: "Server:"});
+                        socket.emit('msg', {msg: "Vi kunde inte hitta en gif som matchade med: " + gifName, nickname: "Server:"});
                         return
                     }
                     io.in(msgObj.joinedRoom).emit("msg", {msg: "", nickname: socket.nickname, gifUrl, avatarColor: msgObj.avatarColor})
