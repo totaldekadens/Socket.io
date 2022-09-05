@@ -107,7 +107,7 @@ const Chat = () => {
                 </div>
             </div>
 
-            <div style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", padding: "20px"}}>
+            <div style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", flex: 1, overflowY: "auto", padding: "20px"}}>
             { 
                 socketInfo.joinedRoom.length > 0 ? (
 
