@@ -5,11 +5,6 @@ import { margin } from '@mui/system';
 
 const Msg = (props) => {
 
-    
-
-
-
-    console.log()
     return (
         <div style={container} >
 
@@ -18,7 +13,6 @@ const Msg = (props) => {
             <div style={msgContainer}>
                 
                 <p style={{ fontSize: "18px", fontWeight: "bolder", width: "100%" }}>{props.nickname}</p> 
-
 
                 {!props.gifUrl ? (
                     <p style={{ fontSize: "14px", margin: "", color: "#d9d9d9" , fontWeight: "lighter", whiteSpace: "pre-wrap"}}>{props.message}</p>
@@ -33,9 +27,6 @@ const Msg = (props) => {
                     <img style={{ maxWidth: "300px", maxHeight: "300px" }} src={props.gifUrl} />
                 ) : undefined}
             </div>
-
-
-
 
         </div>
     )

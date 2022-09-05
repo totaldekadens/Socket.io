@@ -16,7 +16,6 @@ export const SocketInfoProvider = ({ children }) => {
         commandList: []
     });
 
-    
 
     const connectSocket = () => {
         socket.connect()
@@ -43,15 +42,15 @@ export const SocketInfoProvider = ({ children }) => {
         })
 
         socket.on("commandList", (commandList) => {
-            const socketInfoCopy = {...socketInfo};
+            const socketInfoCopy = {...socketInfoRef.current};
             socketInfoCopy.commandList = commandList;
             setSocketInfo(socketInfoCopy)
-
         })
 
         return () => {
             socket.off('newSocketConnected');
             socket.off('welcome');
+            socket.off('commandList')
         };
 
     }, [])

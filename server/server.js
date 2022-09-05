@@ -15,15 +15,6 @@ io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
     io.emit("rooms", convertRoom())
     io.emit("newSocketConnected", socket.id)
-    io.emit("commandList", [
-        {
-            command: "/gif",
-            desc: "Skriv /gif följt av vad du vill söka på."
-        },{
-            command: "/w",
-            desc: "Skriv /w följt av staden du vill visa vädret i."
-        }
-    ])
 
     /* Ange */
     
@@ -53,7 +44,16 @@ io.on("connection", async (socket) => {
         
         io.emit("rooms", convertRoom())
     })
-    
+
+    socket.emit("commandList", [
+            {
+                command: "/gif",
+                desc: "Skriv /gif följt av vad du vill söka på."
+            },{
+                command: "/w",
+                desc: "Skriv /w följt av staden du vill visa vädret i."
+            }
+    ])
 
     /* Hugo */
     // Recieves the message sent from client
@@ -118,11 +118,11 @@ io.on("connection", async (socket) => {
 const convertRoom = () => {
 
     const convertedArray = Array.from(io.sockets.adapter.rooms)
- 
+
     const filteredRooms = convertedArray.filter(room => !room[1].has(room[0]) )
     
     const roomsWithSocketID = filteredRooms.map((roomArray) => {
-         return {room: roomArray[0], sockets: Array.from(roomArray[1])} 
+        return {room: roomArray[0], sockets: Array.from(roomArray[1])} 
     })
 
     

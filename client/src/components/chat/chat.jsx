@@ -92,12 +92,10 @@ const Chat = () => {
             return
         }
         if (event.key === 'Enter') {
-            console.log("kommer in i enter")
             event.preventDefault();
             handleSubmit()
         }
     }
-    console.log(socketInfo.commandList)
     return (
         <div style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
 
@@ -142,10 +140,10 @@ const Chat = () => {
                 <div style={commandStyle}>
                     <h4>Tillgängliga kommandon:</h4>
                     {
-                        socketInfo.commandList.map((command) => {
+                        socketInfo.commandList.map((command, index) => {
 
                             return (
-                                <div style={{padding: "5px"}}>
+                                <div key={index} style={{padding: "5px"}}>
                                         {command.command} - {command.desc}
                                 </div>
                             )
