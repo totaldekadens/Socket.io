@@ -3,6 +3,7 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Msg from './msg';
 import { socketInfoContext } from "../context/socketInfoProvider";
 import BeatLoader from 'react-spinners/BeatLoader';
+import { maxWidth } from "@mui/system";
 
 
 const Chat = () => {
@@ -40,7 +41,7 @@ const Chat = () => {
 
         socket.on("msg", (msgObj) => {
             const newMsgList = [...msgRef.current];
-           
+
             newMsgList.push({
                 nickname: msgObj.nickname,
                 message: msgObj.msg,
@@ -98,52 +99,60 @@ const Chat = () => {
     }
 
     return (
-        <div className='chat' style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
+        <div style={{ display: "flex", flexDirection: "column", background: "#383838", height: "100vh", overflow:"hidden", padding:"20px"}}>
 
-            <div className="chat__header">
-                <div className="chat__roomName">
+            <div>
+                <div>
                     <h1 style={{color:"gray", marginBottom:"15px"}}># {socketInfo.joinedRoom}</h1>
                 </div>
             </div>
 
-            
-            <div className="chat__messages" style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", flex: "1", padding: "20px" }}>
-                {
-                    getMsg.map((msgObj, index) => {
-                        return(
+            <div style={{flexGrow: 1,flexDirection: "column", justifyContent: "flex-end", overflowY: "auto", padding: "20px"}}>
+            { 
+                socketInfo.joinedRoom.length > 0 ? (
 
-                            <Msg key={index} 
-                            nickname={msgObj.nickname} 
-                            message={msgObj.message} 
-                            weather={msgObj.weather} 
-                            gifUrl={msgObj.gifUrl}
-                            avatarColor= {msgObj.avatarColor}
-                            />
+                
+                        getMsg.map((msgObj, index) => {
+                            return(
 
-                        )
-                    })
-                   
+                                <Msg key={index} 
+                                nickname={msgObj.nickname} 
+                                message={msgObj.message} 
+                                weather={msgObj.weather} 
+                                gifUrl={msgObj.gifUrl}
+                                avatarColor= {msgObj.avatarColor}
+                                />
+
+                            )
+                        })
+
+                ) : (
+                    <h3>Du är inte ansluten till något rum, välj ett i listan till vänster eller skapa ett nytt för att börja chatta...</h3>
+                )
                 }
-               
-               <div ref={myRef} className="helloooo_____hej" style={{backgroundColor:"orange"}} />
+                <div ref={myRef} style={{backgroundColor:"orange"}} />
             </div>
-           
+
+            { socketInfo.joinedRoom.length > 0 ? (
+            <>
             <div style={{display: "flex",padding:"20px"}}>
                     {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname}</div></> : ""}
-                </div> 
-            <div className="chat__input" style={{ maxHeight: "50%", display: "flex", padding: "10px", margin:"0 15px 40px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
+            </div>
+            <div style={{ maxHeight: "50%", display: "flex", justifyContent: "space-between", padding: "10px", margin:"0 15px 0px 15px", backgroundColor: "#474b53", borderRadius: "5px" }}>
                 
                 <TextareaAutosize
                     aria-label="empty textarea"
-                    placeholder="#Message someone in chat.."
+                    placeholder="# Skriv någonting i chatten.."
                     maxRows={14}
                     style={{ hight:"100%",width: "80%", resize: 'none', overflow:"hidden", background: "transparent", outlineWidth: "0px", marginLeft:"5px",color: "white", border: "none", fontSize: "16px" }}
                     onKeyPress={handleKeyPress}
                     onChange={(event) => {setValue(event.target.value)}}
                     value={getValue}
                 />
-                <button onClick={handleSubmit} style={{}}>SEND</button>
+                <button onClick={handleSubmit} style={{textDecoration: "none", color: "white", backgroundColor: "#474b53", border: 0, cursor:"pointer"}}>SEND</button>
             </div>
+            </>
+            ): undefined}
         </div>
     )
 }

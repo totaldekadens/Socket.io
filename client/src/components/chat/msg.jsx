@@ -21,7 +21,7 @@ const Msg = (props) => {
 
 
                 {!props.gifUrl ? (
-                    <p style={{ fontSize: "14px", margin: "", color: "#d9d9d9" , fontWeight: "lighter"}}>{props.message}</p>
+                    <p style={{ fontSize: "14px", margin: "", color: "#d9d9d9" , fontWeight: "lighter", whiteSpace: "pre-wrap"}}>{props.message}</p>
                 ) : undefined}
                 {props.weather ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -43,12 +43,15 @@ const Msg = (props) => {
 
 const container = {
     with: "100%", 
-    display: "flex" 
+    display: "flex",
+    borderBottom: "1px solid #3c3c3c",
+    marginTop: "15px"
 }
 
 const msgContainer = {
+    width: "100%",
     marginLeft: "20px",
-    marginBottom:"20px"
+    marginBottom:"20px",
 }
 
 export default Msg
