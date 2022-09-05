@@ -56,10 +56,6 @@ const ListOfRooms = () => {
 
     }
 
-    const setButtonColor = (e, color) => {
-        e.target.style.background = color;
-    }
-
     return (
         <div style={{ color: "white" }}>
             <h2>Aktiva rum:</h2>
@@ -68,7 +64,7 @@ const ListOfRooms = () => {
                 {
                     getRoom.length > 0 ? (
                         getRoom.map((room, index) => {
-
+                            
                             return (
                                 <div style={listitemContainer} key={index}>
                                     <Accordion style={{ width: "100%", backgroundColor: "#484848", boxShadow: "none"}}>
@@ -76,7 +72,7 @@ const ListOfRooms = () => {
                                             expandIcon={<ExpandMoreIcon style={{color: "white"}}/>}
                                             aria-controls="panel1a-content"
                                             id="panel1a-header"
-                                        >
+                                            >
                                             <div style={{width: "100%", paddingRight: "5px", display: "flex", justifyContent: "space-between" }}>
                                                 <Typography style={{ color: "white" }}># {room.room}</Typography>
                                                 <Typography style={{ color: "white" }}>({room.sockets.length})</Typography>
@@ -87,10 +83,8 @@ const ListOfRooms = () => {
                                             <div 
                                                 onClick={() => buttonHandler(room.room)} 
                                                 style={{...buttonStyle, backgroundColor: socketInfo.joinedRoom == room.room ? "red": "green"}}
-                                                onMouseOver={(e) => {setButtonColor(e, socketInfo.joinedRoom == room.room ? "#ff6347": "#006400")}}
-                                                onMouseOut={(e) => {setButtonColor(e, socketInfo.joinedRoom == room.room ? "red": "green")}}
                                             >
-                                                <p style={{ color: "white", padding:"3px" }}>{ socketInfo.joinedRoom == room.room ? "Lämna" : "Anslut"}</p> {/* Use context to check if the room = the room that the user is connected to. And render "leave" instead of "connect". */}
+                                                <p style={{ color: "white", padding:"3px" }}>{ socketInfo.joinedRoom == room.room ? "Lämna" : "Anslut"}</p>
                                             </div>
                                         </AccordionDetails>
 
