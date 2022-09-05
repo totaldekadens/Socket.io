@@ -7,10 +7,6 @@ const UserBar = () => {
 
     const { socketInfo, setSocketInfo, getSocket } = useContext(socketInfoContext)
 
-    const setButtonColor = (e, color) => {
-        e.target.style.background = color;
-    }
-
     const buttonHandler = (room) => {
 
         let socketInfoCopy = {...socketInfo}  
@@ -30,8 +26,7 @@ const UserBar = () => {
             </div>
             {socketInfo.joinedRoom != "" ? (
             <div 
-                style={{background: "red", cursor: "pointer"}} 
-                onMouseOver={(e) => {setButtonColor(e, "#ff6347")}} onMouseOut={(e) => {setButtonColor(e, "red")}}
+                style={{background: "red", cursor: "pointer", borderRadius: "5px"}} 
                 onClick={() => buttonHandler(socketInfo.joinedRoom)}
                 >
                 <p style={{padding: "3px"}}>Lämna rum</p>
