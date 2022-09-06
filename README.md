@@ -1,15 +1,14 @@
 # Socket.io
 
-We have created a chat-based app using socket.io that allows users to chat
-with each other in real time.
+This is a group assignment made by Hugo Bengtsson, Fredrik Lexö and Angelica Moberg Skoglund. We have created a chat-based app using socket.io that allows users to chat with each other in real time.
 
 ## Structure: 
-Frontend: React.js
+Frontend: React.js using socket.io
 Backend: Node.js using socket.io and express
 External API's from : 
-* geonames: Searching for city and returning coordinates for SMHI.request
+* Geonames: Searching for city and returning coordinates for SMHI.request
 * SMHI: For weather
-* giphy: For gif according to query
+* Giphy: For gif according to query
 
 Below follows the assignments different requirements in Swedish.
 
