@@ -21,14 +21,13 @@ function App() {
 
     let socketInfoCopy = socketInfo
 
-    if (nickname.length > 0) {
+    if (nickname.trim().length > 0) {
       socketInfoCopy.nickname = nickname
       setSocketInfo(socketInfoCopy)
       setShouldShowModal(false)
       connectSocket()
 
     }
-
   }
 
   // If nickname is not set then modal will show up and ask for nickname before proceed.

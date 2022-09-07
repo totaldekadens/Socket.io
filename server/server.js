@@ -10,7 +10,6 @@ const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
 let isTypingList = []
-const emptyList = []
 
 io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)

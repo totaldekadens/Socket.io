@@ -22,16 +22,17 @@ const UserBar = () => {
         <div style={userBarStyle}>
             <div style={{display: "flex", gap: "10px", alignItems: "center"}}>
                 <AccountCircleIcon style={{color: socketInfo.avatarColor}}/>
-                <p>{socketInfo.nickname}</p>
+                <p style={{fontSize: "20px"}}>{socketInfo.nickname}</p>
             </div>
-            {socketInfo.joinedRoom != "" ? (
+            {/* Bortkommenterad så länge. Kolla med Hugo och Fredrik */}
+            {/* {socketInfo.joinedRoom != "" ? (
             <div 
                 style={{background: "red", cursor: "pointer", borderRadius: "5px", width: "100px", textAlign: "center"}} 
                 onClick={() => buttonHandler(socketInfo.joinedRoom)}
                 >
                 <p style={{padding: "5px"}}>Lämna rum</p>
             </div>
-        ): undefined}
+        ): undefined} */}
         </div>
     )
 }
