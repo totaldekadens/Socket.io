@@ -18,8 +18,6 @@ const Chat = () => {
 
     const myRef = useRef(500);
 
-    console.log(socketInfo.joinedRoom)
-
     // Gets socket
     let socket = getSocket()
 
@@ -36,6 +34,11 @@ const Chat = () => {
     const executeScroll = () => myRef.current.scrollIntoView({
         behavior: "auto",
     })
+
+    // Resets chat window when room changes
+    useEffect(() => {
+        setMsg([])
+    }, [socketInfo.joinedRoom])
 
 
     // Receives message from senders

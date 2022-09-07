@@ -85,14 +85,12 @@ io.on("connection", async (socket) => {
                 isTypingList.push(msgObj)
             }
 
-            console.log("true")
             socket.broadcast.to(joinedRoom).emit("isTyping", isTypingList);
 
         } else {
             const removeId = isTypingList.filter(user => user.id != socket.id)
             isTypingList = removeId
 
-            console.log("false")
             socket.broadcast.to(joinedRoom).emit("isTyping", isTypingList);
         }
 

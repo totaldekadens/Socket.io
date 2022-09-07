@@ -15,7 +15,7 @@ const CreateRoom = () => {
     const [room, setRoom] = useState("")
 
     // Copy of context
-    let socketInfoCopy = {...socketInfo}  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
+    let socketInfoCopy = {...socketInfo} 
 
     // Gets socket
     let socket = getSocket()
