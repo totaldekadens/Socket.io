@@ -38,6 +38,7 @@ const Chat = () => {
     // Resets chat window when room changes
     useEffect(() => {
         setMsg([])
+        setValue("")
     }, [socketInfo.joinedRoom])
 
 
@@ -102,8 +103,6 @@ const Chat = () => {
             const removeId = msgArray.filter(id => id.id != socket.id)
             msgArray = removeId
 
-            console.log(msgArray)
-
             // Set the list which renders who are typing
             setBuddyIsTyping(msgArray)
         })
@@ -111,7 +110,6 @@ const Chat = () => {
         return () => {
             socket.off('isTyping');
         };
-
 
     }, [getValue, isTyping, socketInfo])
 
@@ -143,7 +141,6 @@ const Chat = () => {
             { 
                 socketInfo.joinedRoom.length > 0 ? (
 
-                
                         getMsg.map((msgObj, index) => {
                             return(
 

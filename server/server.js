@@ -25,12 +25,7 @@ io.on("connection", async (socket) => {
         socket.avatarColor = socketRoomData.avatarColor
         io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
-        
-        // Removes socket from typingList if it currently is typing when leaving
-        const removeId = isTypingList.filter(person => person.id != socket.id)
-        isTypingList = removeId
-        socket.broadcast.to(socketRoomData.roomToLeave).emit("isTyping", isTypingList);
-        
+        removeSocket(socketRoomData.roomToLeave)
     })
 
 
@@ -50,8 +45,6 @@ io.on("connection", async (socket) => {
             const findId = room.sockets.find(user => user.id == socket.id)
             
             if(findId && findId.id == socket.id) {
-                
-                String(room.room)
                 return room.room
             }
 
@@ -73,8 +66,6 @@ io.on("connection", async (socket) => {
         msgObj.joinedRoom = joinedRoom
         msgObj.id = socket.id
 
-        console.log(msgObj)
-
         // If someone is typing
         if(msgObj.isTyping) {            
             
@@ -88,13 +79,8 @@ io.on("connection", async (socket) => {
             socket.broadcast.to(joinedRoom).emit("isTyping", isTypingList);
 
         } else {
-            const removeId = isTypingList.filter(user => user.id != socket.id)
-            isTypingList = removeId
-
-            socket.broadcast.to(joinedRoom).emit("isTyping", isTypingList);
+            removeSocket(joinedRoom)
         }
-
-        console.log(isTypingList)
     })
     
 
@@ -112,6 +98,8 @@ io.on("connection", async (socket) => {
         socket.leave(room)
         
         io.emit("rooms", convertRoom())
+
+        removeSocket(room)
     })
 
     socket.emit("commandList", [
@@ -123,6 +111,7 @@ io.on("connection", async (socket) => {
                 desc: "Skriv /w följt av staden du vill visa vädret i."
             }
     ])
+
 
 
 
@@ -183,8 +172,14 @@ io.on("connection", async (socket) => {
         }
         io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname, avatarColor: msgObj.avatarColor})
     })
-})
 
+    // Removes socket from typingList if it currently is typing when leaving
+    const removeSocket = (room) => {
+        const removeId = isTypingList.filter(user => user.id != socket.id)
+        isTypingList = removeId
+        socket.broadcast.to(room).emit("isTyping", isTypingList);
+    }
+})
 
 
 const convertRoom = () => {
