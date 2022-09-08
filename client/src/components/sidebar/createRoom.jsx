@@ -15,7 +15,7 @@ const CreateRoom = () => {
     const [room, setRoom] = useState("")
 
     // Copy of context
-    let socketInfoCopy = {...socketInfo}  // Checka med Victor om kopieringen blir rätt {...socketInfo}. Skillnad?
+    let socketInfoCopy = {...socketInfo} 
 
     // Gets socket
     let socket = getSocket()
@@ -23,7 +23,7 @@ const CreateRoom = () => {
     // Handle "skapa rum"-button. Closes modal, "Sends" new object when joining new room and updates context. 
     const handleClick = () => {
 
-        if(room.length > 0) {
+        if(room.trim().length > 0) {
             
             socket.emit("join", {
                 roomToLeave: socketInfo.joinedRoom, 

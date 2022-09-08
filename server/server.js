@@ -9,14 +9,12 @@ const app = express()
 const httpServer = createServer(app);
 const port = 3000
 const io = new Server(httpServer, {cors: {origin: "*"}});
-
+let isTypingList = []
 
 io.on("connection", async (socket) => {
     console.log("Socket has connected: " + socket.id)
     io.emit("rooms", convertRoom())
     io.emit("newSocketConnected", socket.id)
-
-    /* Ange */
     
     // Join/Create room
     socket.on("join", (socketRoomData) => {
@@ -26,15 +24,71 @@ io.on("connection", async (socket) => {
         socket.avatarColor = socketRoomData.avatarColor
         io.emit("rooms", convertRoom())
         io.in(socketRoomData.roomToJoin).emit("welcome", `Välkommen ${socket.nickname}`)
+        removeSocket(socketRoomData.roomToLeave)
     })
 
+
+    socket.on("resetIsTypingList", (reset) => {
+        isTypingList = reset
+    })
 
     // shows/checks if someone is typing in a specific room
     socket.on("isTyping", (msgObj) => {
-        socket.broadcast.to(msgObj.joinedRoom).emit("isTyping", {nickname: socket.nickname, isTyping: msgObj.isTyping});
+
+        // Returns all rooms
+        const getRooms = convertRoom()
+
+        // Returns joined room
+        let getRoom = getRooms.map((room) => {
+
+            const findId = room.sockets.find(user => user.id == socket.id)
+            
+            if(findId && findId.id == socket.id) {
+                return room.room
+            }
+
+        })
+
+        getRoom = String(getRoom)
+        getRoom = getRoom.replaceAll(",", "")
+
+        if(!getRoom) {
+            return
+        }
+
+        let joinedRoom = String(getRoom)
+
+        const filterRooms = isTypingList.filter(room => room.joinedRoom == joinedRoom)
+        isTypingList = filterRooms
+
+        msgObj.nickname = socket.nickname
+        msgObj.joinedRoom = joinedRoom
+        msgObj.id = socket.id
+
+        // If someone is typing
+        if(msgObj.isTyping) {            
+            
+            // Check if Id is in list, if it's not, push the object to the list
+            const findId = isTypingList.find((user) => user.id == socket.id)
+
+            if(!findId) {
+                isTypingList.push(msgObj)
+            }
+
+            socket.broadcast.to(joinedRoom).emit("isTyping", isTypingList);
+
+        } else {
+            removeSocket(joinedRoom)
+        }
     })
     
-    /* Fredrik */
+
+
+
+
+
+
+
     socket.on("disconnect", () => {
         io.emit("rooms", convertRoom())
     })
@@ -43,6 +97,8 @@ io.on("connection", async (socket) => {
         socket.leave(room)
         
         io.emit("rooms", convertRoom())
+
+        removeSocket(room)
     })
 
     socket.emit("commandList", [
@@ -55,7 +111,11 @@ io.on("connection", async (socket) => {
             }
     ])
 
-    /* Hugo */
+
+
+
+
+
     // Recieves the message sent from client
     socket.on("msg", async (msgObj) => {
 
@@ -111,8 +171,14 @@ io.on("connection", async (socket) => {
         }
         io.in(msgObj.joinedRoom).emit("msg", {msg: msgObj.msg, nickname: socket.nickname, avatarColor: msgObj.avatarColor})
     })
-})
 
+    // Removes socket from typingList if it currently is typing when leaving
+    const removeSocket = (room) => {
+        const removeId = isTypingList.filter(user => user.id != socket.id)
+        isTypingList = removeId
+        socket.broadcast.to(room).emit("isTyping", isTypingList);
+    }
+})
 
 
 const convertRoom = () => {

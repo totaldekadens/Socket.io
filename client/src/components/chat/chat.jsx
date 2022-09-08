@@ -3,7 +3,6 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Msg from './msg';
 import { socketInfoContext } from "../context/socketInfoProvider";
 import BeatLoader from 'react-spinners/BeatLoader';
-import { maxWidth } from "@mui/system";
 
 
 const Chat = () => {
@@ -15,14 +14,14 @@ const Chat = () => {
     const [getMsg, setMsg] = useState([])
     msgRef.current = getMsg;
     const [isTyping, setTyping] = useState(false)
-    const [buddyIsTyping, setBuddyIsTyping] = useState({ nickname: "", isTyping: false })
+    const [buddyIsTyping, setBuddyIsTyping] = useState([])
 
     const myRef = useRef(500);
-
 
     // Gets socket
     let socket = getSocket()
 
+    // Send message
     const handleSubmit = () => {
 
         if (getValue.trim().length > 0) {
@@ -30,9 +29,17 @@ const Chat = () => {
             setValue("")
         }
     }
+
+    // Scrolls to "myRef" (div in the bottom of chat window) when called. (everytime a message arrives)
     const executeScroll = () => myRef.current.scrollIntoView({
         behavior: "auto",
     })
+
+    // Resets chat window when room changes
+    useEffect(() => {
+        setMsg([])
+        setValue("")
+    }, [socketInfo.joinedRoom])
 
 
     // Receives message from senders
@@ -58,34 +65,59 @@ const Chat = () => {
         };
     }, [])
 
+
+    // When reloading page, reset array to an empty list
+    useEffect(() => {
+        let empty = []
+
+        socket.emit("resetIsTypingList", empty )
+    }, [])
+    
+
     // Receives and sends status if someone is typing 
     useEffect(() => {
 
+        // Checks if user is typing or not
         if (getValue.length > 0) {
             setTyping(true)
         } else {
             setTyping(false)
         }
 
-        socket.emit("isTyping", { joinedRoom: socketInfo.joinedRoom, isTyping })
+        // If joined room is set send status to server
+        if(socketInfo.joinedRoom.length > 0 ) {
+            socket.emit("isTyping", { isTyping })
 
-        socket.on("isTyping", (msgObj) => {
-            setBuddyIsTyping({
-                nickname: msgObj.nickname,
-                isTyping: msgObj.isTyping
-            })
+            // If rooms doesnt match, set list to an empty array
+            if(buddyIsTyping.length > 0 && buddyIsTyping[0].joinedRoom) {
+                if(socketInfo.joinedRoom != buddyIsTyping[0].joinedRoom) {
+                    setBuddyIsTyping([])
+                }
+            }
+        }
+
+        // Receives status from senders
+        socket.on("isTyping", (msgArray) => {
+
+            // Removes user from list of current typers
+            const removeId = msgArray.filter(id => id.id != socket.id)
+            msgArray = removeId
+
+            // Set the list which renders who are typing
+            setBuddyIsTyping(msgArray)
         })
 
         return () => {
             socket.off('isTyping');
         };
 
+    }, [getValue, isTyping, socketInfo])
 
-    }, [getValue, isTyping])
-
+    // Calls on executescroll when a message from sender is received
     useEffect(() => {
         executeScroll()
     }, [getMsg])
+
 
     const handleKeyPress = (event) => {
         if (event.key == "Enter" && event.shiftKey) {
@@ -109,7 +141,6 @@ const Chat = () => {
             { 
                 socketInfo.joinedRoom.length > 0 ? (
 
-                
                         getMsg.map((msgObj, index) => {
                             return(
 
@@ -134,7 +165,9 @@ const Chat = () => {
             { socketInfo.joinedRoom.length > 0 ? (
             <>
             <div style={{display: "flex",padding:"20px"}}>
-                    {buddyIsTyping.isTyping ? <><BeatLoader /><div style={{marginLeft: "10px"}}>{buddyIsTyping.nickname}</div></> : ""}
+                    {buddyIsTyping.length > 0 ? buddyIsTyping.map((item, index) => {return <div key={index} style={{display:"flex"}}><BeatLoader style={{marginLeft: "10px"}}  /><div style={{marginLeft: "10px"}}>{item.nickname}</div></div> })
+                    : ""
+                    } 
             </div>
                 { getValue === "/" ? (
                 <div style={commandStyle}>
