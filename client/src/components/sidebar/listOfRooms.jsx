@@ -31,10 +31,12 @@ const ListOfRooms = () => {
         socket.on("rooms", (roomList) => {
 
             roomList.forEach(room => {
+                console.log(room)
                 room.expand = false
             })
 
-            setRoom(roomList)
+            // Tar med alla rum i listan
+            //setRoom(roomList)
 
             const current = roomList.map((room) => {
 
@@ -46,6 +48,17 @@ const ListOfRooms = () => {
             const filterCurrent = current.filter(room => room != undefined)
 
             setCurrentRoom(filterCurrent)
+
+
+            // Tar bort det valda rummet från listan
+            if(filterCurrent.length > 0) {
+                const filterActive = roomList.filter(room => room.room != filterCurrent[0].room)
+
+                setRoom(filterActive)
+            } else {
+                setRoom(roomList)
+            }
+            
         })
 
         return () => {
