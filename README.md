@@ -4,11 +4,15 @@ This is a group assignment made by Hugo Bengtsson, Fredrik Lexö and Angelica Mo
 
 ## Structure: 
 Frontend: React.js using socket.io
+
 Backend: Node.js using socket.io and express
+
 External API's from : 
 * Geonames: Searching for city and returning coordinates for SMHI.request
 * SMHI: For weather
 * Giphy: For gif according to query
+
+## Requirements for the assignment
 
 Below follows the assignments different requirements in Swedish.
 
@@ -40,4 +44,10 @@ Link to repo: https://github.com/totaldekadens/Socket.io
 * Redirect to "client"
     -	Npm i
     -	Npm run dev
+
+
+## Sneak peak
+![bild 2](https://user-images.githubusercontent.com/90898648/189472718-d99f13af-b3a4-405e-8d49-cfdaff90a33e.JPG)
+![bild 1 copy](https://user-images.githubusercontent.com/90898648/189472720-85142929-2331-47ed-bad6-3c524b39588e.JPG)
+
 
