@@ -46,8 +46,3 @@ Link to repo: https://github.com/totaldekadens/Socket.io
     -	Npm run dev
 
 
-## Sneak peak
-![bild 2](https://user-images.githubusercontent.com/90898648/189472718-d99f13af-b3a4-405e-8d49-cfdaff90a33e.JPG)
-![bild 1 copy](https://user-images.githubusercontent.com/90898648/189472720-85142929-2331-47ed-bad6-3c524b39588e.JPG)
-
-
